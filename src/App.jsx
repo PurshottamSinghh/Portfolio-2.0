@@ -83,7 +83,7 @@ function App() {
     <Canvas 
       dpr={[1, 1.5]}
       gl={{ antialias: true, powerPreference: "high-performance" }}
-      camera={{ position: [0, 200, 0], fov: 60 }} // Bird's eye view: looking down from above
+      camera={{ position: [0, 200, 0], fov: 100 }} // Bird's eye view: looking down from above
     >
       <OrbitControls target={[0, 0, 0]} />
       <CustomStars radius={600} count={2000} /> {/* Reduced count by half with random brightness */}
