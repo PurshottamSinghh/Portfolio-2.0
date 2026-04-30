@@ -14,8 +14,9 @@ import './HolographicCard.css';
  *  - planetPosition: [x, y, z] world position of the frozen planet
  *  - planetSize: radius of the planet (for offset calculations)
  *  - visible: whether the card should be shown (after camera settles)
+ *  - onMoreInfo: callback to open the right detail sidebar
  */
-function HolographicCard({ projectData, planetPosition, planetSize, visible }) {
+function HolographicCard({ projectData, planetPosition, planetSize, visible, onMoreInfo }) {
   const [isRevealed, setIsRevealed] = useState(false);
 
   // Staggered reveal after becoming visible
@@ -58,7 +59,9 @@ function HolographicCard({ projectData, planetPosition, planetSize, visible }) {
 
           {/* Header section */}
           <div className="holo-card__header">
-            <span className="holo-card__label">PROJECT:</span>
+            <span className="holo-card__label">
+              {projectData.isSun ? 'PROFILE:' : 'PROJECT:'}
+            </span>
             <h3 className="holo-card__title">{projectData.projectTitle}</h3>
           </div>
 
@@ -91,6 +94,19 @@ function HolographicCard({ projectData, planetPosition, planetSize, visible }) {
               ))}
             </div>
           </div>
+
+          {/* More Info Button */}
+          <div className="holo-card__divider"></div>
+          <button
+            className="holo-card__more-btn"
+            style={{ pointerEvents: 'auto' }}
+            onClick={() => {
+              if (onMoreInfo) onMoreInfo();
+            }}
+          >
+            <span className="holo-card__more-btn-icon">→</span>
+            View Full Specs
+          </button>
 
           {/* Bottom scanline decoration */}
           <div className="holo-card__scanline"></div>

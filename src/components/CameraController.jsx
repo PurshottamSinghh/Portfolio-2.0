@@ -44,10 +44,23 @@ function CameraController({ activePlanet, planetPosition, activePlanetSize, onAn
       // Determine END Camera Position (The Flight Path)
       let endCameraPos;
 
-      if (isFromOverview) {
+      // Check if this is the Sun (position at/near origin)
+      const distFromSun = Math.sqrt(planetPosition[0] ** 2 + planetPosition[1] ** 2 + planetPosition[2] ** 2);
+      const isSunTarget = distFromSun < 1;
+
+      if (isSunTarget) {
+        // Special Sun handling: approach from a fixed angle
+        // Sun radius is 16, so stay well outside
+        const sunZoomDist = 40;
+        endCameraPos = [
+          sunZoomDist * 0.7,
+          sunZoomDist * 0.5,
+          sunZoomDist * 0.7
+        ];
+
+      } else if (isFromOverview) {
         // Path 1: Eclipse View (From Overview)
         // Fly BEHIND the planet relative to Sun(0,0,0)
-        const distFromSun = Math.sqrt(planetPosition[0] ** 2 + planetPosition[1] ** 2 + planetPosition[2] ** 2);
         const dir = {
           x: planetPosition[0] / distFromSun,
           y: planetPosition[1] / distFromSun,
@@ -78,11 +91,10 @@ function CameraController({ activePlanet, planetPosition, activePlanetSize, onAn
         };
 
         // Stop short distance
-        const stopDist = (activePlanetSize || 1) * 6.0;
+        const stopDist = isSunTarget ? 40 : (activePlanetSize || 1) * 6.0;
 
         // ADD ELEVATION: prevent "locked to orbital plane" feel.
-        // We lift the camera up slightly.
-        const elevation = (activePlanetSize || 1) * 3.0;
+        const elevation = isSunTarget ? 20 : (activePlanetSize || 1) * 3.0;
 
         endCameraPos = [
           planetPosition[0] - dir.x * stopDist,

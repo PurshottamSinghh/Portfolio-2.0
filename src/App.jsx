@@ -12,6 +12,7 @@ import CustomStars from './components/CustomStars';
 import CameraController from './components/CameraController';
 import SlidingSidebar from './components/SlidingSidebar';
 import HolographicCard from './components/HolographicCard';
+import RightDetailSidebar from './components/RightDetailSidebar';
 
 // Data
 import projectsData from './data/projectsData';
@@ -36,6 +37,7 @@ function App() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showHologram, setShowHologram] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const orbitControlsRef = useRef(null);
 
   // ── Planet Configuration ────────────────────────────────
@@ -66,23 +68,32 @@ function App() {
   }, []);
 
   /**
-   * Called when the user selects a project from the sidebar.
+   * Called when the user selects a project from the sidebar or clicks a planet/Sun.
    * Triggers the full sequence: close sidebar → set planet → camera animates.
    */
   const handleSelectProject = useCallback((planetName) => {
     if (activePlanet === planetName) {
-      // Already viewing this planet — just close sidebar
+      // Already viewing this node — just close sidebar
       setIsSidebarOpen(false);
       return;
     }
 
-    // 1. Close sidebar
+    // 1. Close both sidebars
     setIsSidebarOpen(false);
+    setIsDetailOpen(false);
 
     // 2. Hide any existing hologram immediately
     setShowHologram(false);
 
-    // 3. Trigger planet selection (this drives freeze + camera)
+    // 3. Handle Sun selection — position is always [0,0,0]
+    if (planetName === 'Sun') {
+      setActivePlanet('Sun');
+      setPlanetPosition([0, 0, 0]);
+      setIsAnimating(true);
+      return;
+    }
+
+    // 4. Trigger planet selection (this drives freeze + camera)
     setActivePlanet(planetName);
     setPlanetPosition(null); // Wait for planet to report its frozen position
     setIsAnimating(true);
@@ -107,7 +118,7 @@ function App() {
       orbitControlsRef.current.update();
     }
 
-    // Show hologram card AFTER camera settles (only if a planet is active)
+    // Show hologram card AFTER camera settles (only if a node is active)
     if (activePlanet) {
       setShowHologram(true);
     }
@@ -120,11 +131,22 @@ function App() {
     setIsAnimating(true);
     setShowHologram(false);
     setIsSidebarOpen(false);
+    setIsDetailOpen(false);
+  }, []);
+
+  // ── Right Detail Sidebar ───────────────────────────────
+  const handleOpenDetail = useCallback(() => {
+    setIsDetailOpen(true);
+  }, []);
+
+  const handleCloseDetail = useCallback(() => {
+    setIsDetailOpen(false);
   }, []);
 
   // ── Derived Data ───────────────────────────────────────
   const activePlanetData = planetsData.find(p => p.name === activePlanet);
-  const activePlanetSize = activePlanetData ? activePlanetData.size : 1;
+  // For the Sun, use a virtual size for camera zoom (Sun radius is 16)
+  const activePlanetSize = activePlanet === 'Sun' ? 16 : (activePlanetData ? activePlanetData.size : 1);
   const activeProjectData = projectsData.find(p => p.planetName === activePlanet);
 
   return (
@@ -140,13 +162,20 @@ function App() {
         </button>
       )}
 
-      {/* Sliding Sidebar (HTML overlay, outside Canvas) */}
+      {/* Sliding Sidebar — left side (HTML overlay, outside Canvas) */}
       <SlidingSidebar
         isOpen={isSidebarOpen}
         onToggle={handleToggleSidebar}
         projects={projectsData}
         activePlanet={activePlanet}
         onSelectProject={handleSelectProject}
+      />
+
+      {/* Right Detail Sidebar (HTML overlay, outside Canvas) */}
+      <RightDetailSidebar
+        isOpen={isDetailOpen}
+        onClose={handleCloseDetail}
+        projectData={activeProjectData}
       />
 
       {/* 3D Canvas */}
@@ -171,7 +200,23 @@ function App() {
 
         <CustomStars radius={1000} count={1000} />
         <ambientLight intensity={1.0} />
-        <Sun />
+
+        {/* Sun — now clickable and selectable */}
+        <Sun
+          isActive={activePlanet === 'Sun'}
+          onSelect={handleSelectProject}
+        />
+
+        {/* Sun's Holographic Card — rendered when Sun is active */}
+        {activePlanet === 'Sun' && (
+          <HolographicCard
+            projectData={activeProjectData}
+            planetPosition={planetPosition}
+            planetSize={16}
+            visible={showHologram && !isAnimating}
+            onMoreInfo={handleOpenDetail}
+          />
+        )}
 
         {planetsData.map((planet, index) => (
           <React.Fragment key={index}>
@@ -205,6 +250,7 @@ function App() {
                 planetPosition={planetPosition}
                 planetSize={planet.size}
                 visible={showHologram && !isAnimating}
+                onMoreInfo={handleOpenDetail}
               />
             )}
           </React.Fragment>

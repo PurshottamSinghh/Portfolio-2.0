@@ -1,10 +1,47 @@
 /**
  * projectsData.js
- * Centralized data architecture mapping each planet to a portfolio project.
- * Each entry contains display metadata, project info, and holographic UI fields.
+ * Centralized data architecture mapping each celestial body to a portfolio entry.
+ * 
+ * Categories:
+ *   "Core Profile"  — The Sun (About Me)
+ *   "Projects"      — Technical projects
+ *   "Experiences"   — Professional experiences & fellowships
+ * 
+ * Each entry includes holographic UI fields and extended detail fields
+ * for the right-side detail panel.
  */
 
 const projectsData = [
+  // ═══════════════════════════════════════════════════════════
+  //  CORE PROFILE — The Sun
+  // ═══════════════════════════════════════════════════════════
+  {
+    id: "sun",
+    planetName: "Sun",
+    isSun: true,
+    projectTitle: "About Me",
+    description:
+      "Full-stack developer and computer science student passionate about building immersive web experiences, data-driven solutions, and civic technology.",
+    techStack: ["React", "Python", "Three.js", "PostgreSQL"],
+    statusStat: "Available",
+    statusIcon: "☀",
+    telemetry: "Open to Opportunities",
+    liveUrl: null,
+    sourceUrl: "https://github.com/",
+    category: "Core Profile",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    collaborators: ["University of Toledo", "City of Toledo", "Open Source"],
+    documentLinks: [
+      { label: "Resume", url: "#" },
+      { label: "LinkedIn", url: "#" },
+      { label: "GitHub", url: "#" },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  //  PROJECTS — Technical builds
+  // ═══════════════════════════════════════════════════════════
   {
     id: "mercury",
     planetName: "Mercury",
@@ -17,7 +54,14 @@ const projectsData = [
     telemetry: "RocketHacks 2025",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Hackathon",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.",
+    collaborators: ["Team of 4 developers"],
+    documentLinks: [
+      { label: "Source Code", url: "#" },
+      { label: "Demo Video", url: "#" },
+    ],
   },
   {
     id: "venus",
@@ -31,7 +75,13 @@ const projectsData = [
     telemetry: "City of Toledo",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Civic Tech",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna.",
+    collaborators: ["City of Toledo IT Department"],
+    documentLinks: [
+      { label: "Source Code", url: "#" },
+    ],
   },
   {
     id: "earth",
@@ -45,7 +95,14 @@ const projectsData = [
     telemetry: "Active Deployment",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Creative Dev",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+    collaborators: ["Solo Project"],
+    documentLinks: [
+      { label: "Source Code", url: "#" },
+      { label: "Live Site", url: "#" },
+    ],
   },
   {
     id: "mars",
@@ -59,7 +116,13 @@ const projectsData = [
     telemetry: "Campus Network",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Full Stack",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Nullam quis risus eget urna mollis ornare vel eu leo.",
+    collaborators: ["University of Toledo"],
+    documentLinks: [
+      { label: "Source Code", url: "#" },
+    ],
   },
   {
     id: "ceres",
@@ -73,21 +136,13 @@ const projectsData = [
     telemetry: "Network Security",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Security / AI",
-  },
-  {
-    id: "jupiter",
-    planetName: "Jupiter",
-    projectTitle: "UToledo Athletics Data Analytics",
-    description:
-      "Led the migration of the business intelligence infrastructure from Domo to Power BI, developing anomaly detection systems for the athletic department.",
-    techStack: ["Power BI", "Data Science", "Domo"],
-    statusStat: "Internship",
-    statusIcon: "◆",
-    telemetry: "UToledo Athletics",
-    liveUrl: null,
-    sourceUrl: "https://github.com/",
-    category: "Data Analytics",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.",
+    collaborators: ["Academic Research Team"],
+    documentLinks: [
+      { label: "Research Paper", url: "#" },
+    ],
   },
   {
     id: "saturn",
@@ -101,7 +156,14 @@ const projectsData = [
     telemetry: "RocketHacks 2026",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "IoT / Edge",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod. Donec ullamcorper nulla non metus auctor fringilla.",
+    collaborators: ["Hackathon Team"],
+    documentLinks: [
+      { label: "Source Code", url: "#" },
+      { label: "Demo", url: "#" },
+    ],
   },
   {
     id: "uranus",
@@ -115,7 +177,13 @@ const projectsData = [
     telemetry: "Stockfish Engine",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "AI / Games",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    collaborators: ["Solo Project"],
+    documentLinks: [
+      { label: "Source Code", url: "#" },
+    ],
   },
   {
     id: "neptune",
@@ -129,12 +197,41 @@ const projectsData = [
     telemetry: "Research Paper",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Infrastructure",
+    category: "Projects",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+    collaborators: ["IEEE Conference"],
+    documentLinks: [
+      { label: "IEEE Paper", url: "#" },
+      { label: "Source Code", url: "#" },
+    ],
+  },
+
+  // ═══════════════════════════════════════════════════════════
+  //  EXPERIENCES — Professional roles & fellowships
+  // ═══════════════════════════════════════════════════════════
+  {
+    id: "jupiter",
+    planetName: "Jupiter",
+    projectTitle: "UToledo Athletics Data Analytics",
+    description:
+      "Led the migration of the business intelligence infrastructure from Domo to Power BI, developing anomaly detection systems for the athletic department.",
+    techStack: ["Power BI", "Data Science", "Domo"],
+    statusStat: "Internship",
+    statusIcon: "◆",
+    telemetry: "UToledo Athletics",
+    liveUrl: null,
+    sourceUrl: "https://github.com/",
+    category: "Experiences",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.",
+    collaborators: ["UToledo Athletic Department"],
+    documentLinks: [],
   },
   {
     id: "makemake",
     planetName: "Makemake",
-    projectTitle: "Toledo Codes Fellow",
+    projectTitle: "Software Engineer Fellow",
     description:
       "Software engineering fellowship focused on developing and deploying civic software solutions and public infrastructure tools.",
     techStack: ["Civic Tech", "Full-Stack", "Agile"],
@@ -143,7 +240,11 @@ const projectsData = [
     telemetry: "City of Toledo",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Fellowship",
+    category: "Experiences",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id dolor id nibh ultricies vehicula ut id elit. Maecenas faucibus mollis interdum.",
+    collaborators: ["City of Toledo", "Toledo Codes"],
+    documentLinks: [],
   },
   {
     id: "haumea",
@@ -157,7 +258,11 @@ const projectsData = [
     telemetry: "UToledo Campus",
     liveUrl: null,
     sourceUrl: "https://github.com/",
-    category: "Sustainability",
+    category: "Experiences",
+    extendedDetails:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit tempus porttitor. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.",
+    collaborators: ["UToledo Sustainability Office"],
+    documentLinks: [],
   },
 ];
 

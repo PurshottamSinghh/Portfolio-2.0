@@ -224,6 +224,44 @@
 }
 
 
+/* ── More Info Button ─────────────────────────────────────── */
+.holo-card__more-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  margin-top: 4px;
+  background: rgba(77, 210, 255, 0.04);
+  border: 1px solid rgba(77, 210, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(77, 210, 255, 0.7);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.holo-card__more-btn:hover {
+  background: rgba(77, 210, 255, 0.1);
+  border-color: rgba(77, 210, 255, 0.35);
+  color: rgba(77, 210, 255, 0.95);
+  box-shadow: 0 0 20px rgba(77, 210, 255, 0.08);
+}
+
+.holo-card__more-btn-icon {
+  font-size: 13px;
+  transition: transform 0.2s ease;
+}
+
+.holo-card__more-btn:hover .holo-card__more-btn-icon {
+  transform: translateX(3px);
+}
+
+
 /* ── Bottom Scanline ──────────────────────────────────────── */
 .holo-card__scanline {
   margin-top: 14px;
