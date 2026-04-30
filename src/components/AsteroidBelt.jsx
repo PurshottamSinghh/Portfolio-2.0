@@ -10,7 +10,7 @@ function pseudoRandom(seed, offset = 0) {
 
 function AsteroidBelt() {
   const meshRef = useRef();
-  
+
   // Configuration
   const asteroidCount = 5000; // Safe number for performance
   const radius = 60;          // Distance from Sun (midway between Mars (50) and Ceres (70))
@@ -25,21 +25,21 @@ function AsteroidBelt() {
 
       // 2. Random Distance (Radius +/- width jitter)
       const distance = radius + (pseudoRandom(i, 1) - 0.5) * width;
-      
+
       // 3. Convert to X and Z coordinates
       const x = Math.cos(angle) * distance;
       const z = Math.sin(angle) * distance;
-      
+
       // 4. Random Height (Y axis) so it's not a flat disc
-      const y = (pseudoRandom(i, 2) - 0.5) * 3; 
+      const y = (pseudoRandom(i, 2) - 0.5) * 3;
 
       // 5. Random Scale (Size of rock)
       const scale = 0.2 + pseudoRandom(i, 3) * 0.4;
 
       // 6. Random Rotation
       const rotation = [
-        pseudoRandom(i, 4) * Math.PI, 
-        pseudoRandom(i, 5) * Math.PI, 
+        pseudoRandom(i, 4) * Math.PI,
+        pseudoRandom(i, 5) * Math.PI,
         0
       ];
 
@@ -65,11 +65,11 @@ function AsteroidBelt() {
 
       {/* Helper component to position every single rock */}
       {asteroids.map((data, i) => (
-        <InstanceHelper 
-          key={i} 
-          index={i} 
-          data={data} 
-          parentRef={meshRef} 
+        <InstanceHelper
+          key={i}
+          index={i}
+          data={data}
+          parentRef={meshRef}
         />
       ))}
     </instancedMesh>
@@ -88,10 +88,10 @@ const InstanceHelper = ({ index, data, parentRef }) => {
       tempObject.rotation.set(...data.rotation);
       tempObject.scale.set(data.scale, data.scale, data.scale);
       tempObject.updateMatrix();
-      
+
       // Update the specific instance at index 'i'
       parentRef.current.setMatrixAt(index, tempObject.matrix);
-      
+
       // Start slightly randomized to avoid visual glitches
       parentRef.current.instanceMatrix.needsUpdate = true;
     }

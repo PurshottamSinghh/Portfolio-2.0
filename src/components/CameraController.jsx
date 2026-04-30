@@ -1,138 +1,153 @@
 import { useEffect, useRef } from 'react';
-import { useThree, useFrame } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { gsap } from 'gsap';
 
 function CameraController({ activePlanet, planetPosition, activePlanetSize, onAnimationComplete }) {
   const { camera } = useThree();
   const animationRef = useRef(null);
-  const lookAtRef = useRef({ x: 0, y: 0, z: 0 });
   const isAnimatingRef = useRef(false);
-  const targetPositionRef = useRef(null);
 
-  // Bird's eye view position (moved outside to avoid dependency issues)
-  const overviewPositionRef = useRef([0, 200, 0]);
-  const overviewTargetRef = useRef([0, 0, 0]);
+  // Constants for Overview
+  const overviewPosition = [0, 200, 0];
+  const overviewTarget = [0, 0, 0];
 
-  // Continuously track planet position when active (for smooth following)
-  useFrame(() => {
-    if (activePlanet && planetPosition && !isAnimatingRef.current && targetPositionRef.current) {
-      // Smoothly update camera target to follow the planet
-      const target = targetPositionRef.current;
-      lookAtRef.current.x = target[0];
-      lookAtRef.current.y = target[1];
-      lookAtRef.current.z = target[2];
-      camera.lookAt(lookAtRef.current.x, lookAtRef.current.y, lookAtRef.current.z);
-    }
-  });
+  // Track History
+  const prevActivePlanetRef = useRef(null);
+
+  // Initialize camera
+  useEffect(() => {
+    camera.position.set(...overviewPosition);
+    camera.lookAt(...overviewTarget);
+  }, []);
 
   useEffect(() => {
-    // Kill any ongoing animation
+    // Kill any running animation
     if (animationRef.current) {
       animationRef.current.kill();
     }
 
+    // ---------------------------------------------------------
+    // SCENARIO A: Moving TO a Planet (Active Planet Set)
+    // ---------------------------------------------------------
     if (activePlanet && planetPosition) {
       isAnimatingRef.current = true;
-      targetPositionRef.current = planetPosition;
 
-      // DYNAMIC ZOOM: Scale distance by planet size to keep visual size constant
-      // Base distance of 10 for size 1.0. 
-      // Example: Jupiter (2.5) -> 25 distance. Mercury (0.6) -> 6 distance.
-      const offsetDistance = (activePlanetSize || 1) * 10;
-      const offsetHeight = (activePlanetSize || 1) * 2;
+      const isFromOverview = prevActivePlanetRef.current === null;
 
-      // Calculate position: Planet Pos + Fixed Offset
-      // We use a fixed Z offset so we are always "in front" of the planet relative to the card
-      const closeUpPosition = [
-        planetPosition[0],
-        planetPosition[1] + offsetHeight,
-        planetPosition[2] + offsetDistance
-      ];
+      // Target LookAt is ALWAYS the new planet center immediately
+      const targetLookAt = {
+        x: planetPosition[0],
+        y: planetPosition[1],
+        z: planetPosition[2]
+      };
 
-      const closeUpTarget = planetPosition;
+      // Determine END Camera Position (The Flight Path)
+      let endCameraPos;
 
-      // Update lookAt target
-      lookAtRef.current = { x: closeUpTarget[0], y: closeUpTarget[1], z: closeUpTarget[2] };
+      if (isFromOverview) {
+        // Path 1: Eclipse View (From Overview)
+        // Fly BEHIND the planet relative to Sun(0,0,0)
+        const distFromSun = Math.sqrt(planetPosition[0] ** 2 + planetPosition[1] ** 2 + planetPosition[2] ** 2);
+        const dir = {
+          x: planetPosition[0] / distFromSun,
+          y: planetPosition[1] / distFromSun,
+          z: planetPosition[2] / distFromSun
+        };
+        const zoomDist = (activePlanetSize || 1) * 7.0;
 
-      // Animate camera position
+        endCameraPos = [
+          planetPosition[0] + dir.x * zoomDist,
+          planetPosition[1] + (activePlanetSize || 1) * 2, // Highlight elevation
+          planetPosition[2] + dir.z * zoomDist
+        ];
+
+      } else {
+        // Path 2: Direct Flight (From Planet)
+        // Fly to FRONT of planet relative to Current Camera
+        const cam = camera.position;
+        const toPlanet = {
+          x: planetPosition[0] - cam.x,
+          y: planetPosition[1] - cam.y,
+          z: planetPosition[2] - cam.z
+        };
+        const distToPlanet = Math.sqrt(toPlanet.x ** 2 + toPlanet.y ** 2 + toPlanet.z ** 2);
+        const dir = {
+          x: toPlanet.x / distToPlanet,
+          y: toPlanet.y / distToPlanet,
+          z: toPlanet.z / distToPlanet
+        };
+
+        // Stop short distance
+        const stopDist = (activePlanetSize || 1) * 6.0;
+
+        // ADD ELEVATION: prevent "locked to orbital plane" feel.
+        // We lift the camera up slightly.
+        const elevation = (activePlanetSize || 1) * 3.0;
+
+        endCameraPos = [
+          planetPosition[0] - dir.x * stopDist,
+          planetPosition[1] + elevation,
+          planetPosition[2] - dir.z * stopDist
+        ];
+      }
+
+      // ANIMATE
       animationRef.current = gsap.to(camera.position, {
-        x: closeUpPosition[0],
-        y: closeUpPosition[1],
-        z: closeUpPosition[2],
-        duration: 1.5,
+        x: endCameraPos[0],
+        y: endCameraPos[1],
+        z: endCameraPos[2],
+        duration: 2.5,
         ease: "power2.inOut",
+        onStart: () => {
+          // IMMEDIATE FOCUS LOCK
+          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
+        },
         onUpdate: () => {
-          // Update camera lookAt during animation
-          camera.lookAt(lookAtRef.current.x, lookAtRef.current.y, lookAtRef.current.z);
+          // Keep locked on target every frame
+          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
         },
         onComplete: () => {
           isAnimatingRef.current = false;
-          if (onAnimationComplete) {
-            onAnimationComplete();
+          prevActivePlanetRef.current = activePlanet;
+          // Ensure final state
+          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
+
+          if (onAnimationComplete) onAnimationComplete();
+        }
+      });
+
+      // ---------------------------------------------------------
+      // SCENARIO B: Returning to Overview
+      // ---------------------------------------------------------
+    } else if (!activePlanet) {
+      if (prevActivePlanetRef.current !== null) {
+        isAnimatingRef.current = true;
+
+        const targetLookAt = { x: overviewTarget[0], y: overviewTarget[1], z: overviewTarget[2] };
+
+        animationRef.current = gsap.to(camera.position, {
+          x: overviewPosition[0],
+          y: overviewPosition[1],
+          z: overviewPosition[2],
+          duration: 2.0,
+          ease: "power2.inOut",
+          onUpdate: () => {
+            // Look at center
+            camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
+          },
+          onComplete: () => {
+            isAnimatingRef.current = false;
+            prevActivePlanetRef.current = null; // Reset history
+            camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
+
+            if (onAnimationComplete) onAnimationComplete();
           }
-        }
-      });
-
-      // Animate camera target (lookAt) smoothly
-      gsap.to(lookAtRef.current, {
-        x: closeUpTarget[0],
-        y: closeUpTarget[1],
-        z: closeUpTarget[2],
-        duration: 1.5,
-        ease: "power2.inOut",
-        onUpdate: () => {
-          camera.lookAt(lookAtRef.current.x, lookAtRef.current.y, lookAtRef.current.z);
-        }
-      });
-    } else if (activePlanet === null) {
-      isAnimatingRef.current = true;
-      targetPositionRef.current = null;
-      // Return to overview
-      const overviewTarget = overviewTargetRef.current;
-      const overviewPosition = overviewPositionRef.current;
-
-      lookAtRef.current = { x: overviewTarget[0], y: overviewTarget[1], z: overviewTarget[2] };
-
-      // Animate camera position back to overview
-      animationRef.current = gsap.to(camera.position, {
-        x: overviewPosition[0],
-        y: overviewPosition[1],
-        z: overviewPosition[2],
-        duration: 1.5,
-        ease: "power2.inOut",
-        onUpdate: () => {
-          camera.lookAt(lookAtRef.current.x, lookAtRef.current.y, lookAtRef.current.z);
-        },
-        onComplete: () => {
-          isAnimatingRef.current = false;
-          if (onAnimationComplete) {
-            onAnimationComplete();
-          }
-        }
-      });
-
-      // Animate camera target back to center
-      gsap.to(lookAtRef.current, {
-        x: overviewTarget[0],
-        y: overviewTarget[1],
-        z: overviewTarget[2],
-        duration: 1.5,
-        ease: "power2.inOut",
-        onUpdate: () => {
-          camera.lookAt(lookAtRef.current.x, lookAtRef.current.y, lookAtRef.current.z);
-        }
-      });
-    }
-
-    // Update target position when planet position changes (for tracking)
-    if (activePlanet && planetPosition) {
-      targetPositionRef.current = planetPosition;
+        });
+      }
     }
 
     return () => {
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
+      if (animationRef.current) animationRef.current.kill();
     };
   }, [activePlanet, planetPosition, camera, onAnimationComplete, activePlanetSize]);
 

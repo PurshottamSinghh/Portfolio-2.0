@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Html } from '@react-three/drei';
 
-function ProjectAnnotation({ planetSize, isVisible }) {
+function ProjectAnnotation({ planetSize, isVisible, }) {
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
@@ -14,17 +14,31 @@ function ProjectAnnotation({ planetSize, isVisible }) {
 
   // Calculate simple offset: Radius (size/2) + Gap (2 units)
   // Since this component is a child of the Planet mesh, [0,0,0] is the planet center.
-  const radius = planetSize / 2;
-  const offset = radius + 4;
+  const radius = (planetSize / 2) * 4;
+  const offset = radius; // Closer gap for 3D card
+  const angle = Math.PI / 6;
+  const posX = Math.cos(angle) * offset;
+  const posZ = Math.sin(angle);
+
+  // Scale the card based on planet size to be roughly 75% of planet size
+  // Base width of card is 320px (from CSS).
+  // We want visual size to be proportional.
+  // In 3D, scale = 1 means 1 unit = 100px (approx).
+  // Planet diameter = planetSize * 2.
+  // We want Card Height ~ 0.75 * Planet Diameter.
+  // Let's try a simple scalar first.
+  const scale = planetSize * 0.5;
 
   return (
     <Html
       // Position text to the right of the planet
-      position={[offset, 0, 0]}
+      position={[posX, 0, posZ]}
       // Centers the 3D pivot point on the HTML element
       center
-      // Distance factor scales the DOM element based on camera distance (prevents it getting huge)
-      distanceFactor={15}
+      // Transform mode makes it a real 3D object
+      transform
+      // Scale it
+      scale={scale}
       // Ensure it renders on top
       zIndexRange={[100, 0]}
       style={{

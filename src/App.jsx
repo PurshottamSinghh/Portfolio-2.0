@@ -1,15 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import * as THREE from 'three'; // Import THREE for DoubleSide
+import * as THREE from 'three';
 
 // Components
 import Sun from './components/Sun';
 import Planet from './components/Planet';
 import AsteroidBelt from './components/AsteroidBelt';
-import CameraController from './components/CameraController';
 import CustomStars from './components/CustomStars';
+import CameraController from './components/CameraController';
+import SlidingSidebar from './components/SlidingSidebar';
+import HolographicCard from './components/HolographicCard';
+
+// Data
+import projectsData from './data/projectsData';
 
 // Textures Imports
 import MercuryImg from './assets/2k_mercury.jpg';
@@ -25,11 +30,15 @@ import MakemakeImg from './assets/2k_makemake.jpg';
 import HaumeaImg from './assets/2k_haumea.jpg';
 
 function App() {
+  // ── Core State ──────────────────────────────────────────
   const [activePlanet, setActivePlanet] = useState(null);
   const [planetPosition, setPlanetPosition] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showHologram, setShowHologram] = useState(false);
   const orbitControlsRef = useRef(null);
 
+  // ── Planet Configuration ────────────────────────────────
   const planetsData = [
     { name: "Mercury", distance: 20, size: 0.6, speed: 0.6, texture: MercuryImg },
     { name: "Venus", distance: 30, size: 0.9, speed: 0.5, texture: VenusImg },
@@ -51,47 +60,96 @@ function App() {
     return referenceSpeed * Math.sqrt(referenceDistance / distance) * 0.25;
   };
 
-  const handlePositionUpdate = (position) => {
-    setPlanetPosition(position);
-  };
+  // ── Sidebar Handlers ───────────────────────────────────
+  const handleToggleSidebar = useCallback(() => {
+    setIsSidebarOpen(prev => !prev);
+  }, []);
 
-  const handleAnimationComplete = () => {
+  /**
+   * Called when the user selects a project from the sidebar.
+   * Triggers the full sequence: close sidebar → set planet → camera animates.
+   */
+  const handleSelectProject = useCallback((planetName) => {
+    if (activePlanet === planetName) {
+      // Already viewing this planet — just close sidebar
+      setIsSidebarOpen(false);
+      return;
+    }
+
+    // 1. Close sidebar
+    setIsSidebarOpen(false);
+
+    // 2. Hide any existing hologram immediately
+    setShowHologram(false);
+
+    // 3. Trigger planet selection (this drives freeze + camera)
+    setActivePlanet(planetName);
+    setPlanetPosition(null); // Wait for planet to report its frozen position
+    setIsAnimating(true);
+  }, [activePlanet]);
+
+  // ── Planet Position Reporting ───────────────────────────
+  const handlePositionUpdate = useCallback((pos) => {
+    setPlanetPosition(pos);
+  }, []);
+
+  // ── Camera Animation Complete ──────────────────────────
+  const handleAnimationComplete = useCallback(() => {
     setIsAnimating(false);
-    if (activePlanet && planetPosition && orbitControlsRef.current) {
-      orbitControlsRef.current.target.set(planetPosition[0], planetPosition[1], planetPosition[2]);
-      orbitControlsRef.current.update();
-    } else if (!activePlanet && orbitControlsRef.current) {
-      orbitControlsRef.current.target.set(0, 0, 0);
+
+    // Sync OrbitControls target
+    if (orbitControlsRef.current) {
+      if (activePlanet && planetPosition) {
+        orbitControlsRef.current.target.set(...planetPosition);
+      } else {
+        orbitControlsRef.current.target.set(0, 0, 0);
+      }
       orbitControlsRef.current.update();
     }
-  };
 
-  const handlePlanetClick = (planetName) => {
-    if (activePlanet === planetName) return;
-    setActivePlanet(planetName);
+    // Show hologram card AFTER camera settles (only if a planet is active)
+    if (activePlanet) {
+      setShowHologram(true);
+    }
+  }, [activePlanet, planetPosition]);
+
+  // ── Back to Overview ───────────────────────────────────
+  const handleBackToOverview = useCallback(() => {
+    setActivePlanet(null);
     setPlanetPosition(null);
     setIsAnimating(true);
-  };
+    setShowHologram(false);
+    setIsSidebarOpen(false);
+  }, []);
 
-  // Helper to find the size of the active planet
+  // ── Derived Data ───────────────────────────────────────
   const activePlanetData = planetsData.find(p => p.name === activePlanet);
   const activePlanetSize = activePlanetData ? activePlanetData.size : 1;
+  const activeProjectData = projectsData.find(p => p.planetName === activePlanet);
 
   return (
     <>
+      {/* Back to Overview Button */}
       {activePlanet && (
         <button
           className="back-button"
-          onClick={() => {
-            setActivePlanet(null);
-            setPlanetPosition(null);
-            setIsAnimating(true);
-          }}
+          onClick={handleBackToOverview}
+          aria-label="Return to solar system overview"
         >
-          Back to Overview
+          ← Back to Overview
         </button>
       )}
 
+      {/* Sliding Sidebar (HTML overlay, outside Canvas) */}
+      <SlidingSidebar
+        isOpen={isSidebarOpen}
+        onToggle={handleToggleSidebar}
+        projects={projectsData}
+        activePlanet={activePlanet}
+        onSelectProject={handleSelectProject}
+      />
+
+      {/* 3D Canvas */}
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: true, powerPreference: "high-performance" }}
@@ -111,13 +169,13 @@ function App() {
           enableRotate={!isAnimating}
         />
 
-        <CustomStars radius={500} count={1000} />
+        <CustomStars radius={1000} count={1000} />
         <ambientLight intensity={1.0} />
         <Sun />
 
         {planetsData.map((planet, index) => (
           <React.Fragment key={index}>
-            {/* 1. RESTORED ORBITAL RING */}
+            {/* Orbital ring */}
             <mesh rotation={[-Math.PI / 2, 0, 0]}>
               <ringGeometry args={[planet.distance - 0.2, planet.distance + 0.2, 64]} />
               <meshBasicMaterial
@@ -128,7 +186,7 @@ function App() {
               />
             </mesh>
 
-            {/* 2. THE PLANET */}
+            {/* Planet — clickable to zoom, or select via sidebar */}
             <Planet
               name={planet.name}
               distance={planet.distance}
@@ -136,10 +194,19 @@ function App() {
               speed={calculateSpeed(planet.distance)}
               textureFile={planet.texture}
               isActive={activePlanet === planet.name}
-              isAnimating={isAnimating}
-              setActive={handlePlanetClick}
-              onPositionUpdate={activePlanet === planet.name ? handlePositionUpdate : null}
+              onSelect={handleSelectProject}
+              onPositionUpdate={handlePositionUpdate}
             />
+
+            {/* Holographic Card — rendered in 3D space near frozen planet */}
+            {activePlanet === planet.name && (
+              <HolographicCard
+                projectData={activeProjectData}
+                planetPosition={planetPosition}
+                planetSize={planet.size}
+                visible={showHologram && !isAnimating}
+              />
+            )}
           </React.Fragment>
         ))}
 

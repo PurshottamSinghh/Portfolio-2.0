@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
-import ProjectAnnotation from './ProjectAnnotation';
 
 function Planet({
   distance = 10,
@@ -10,51 +9,43 @@ function Planet({
   textureFile,
   name,
   isActive,
-  setActive,
+  onSelect,
   onPositionUpdate,
-  isAnimating
 }) {
-  const [showAnnotation, setShowAnnotation] = React.useState(false);
-
   const meshRef = useRef();
+  const planetMeshRef = useRef();
   const frozenPositionRef = useRef(null);
   const wasActiveRef = useRef(false);
 
-  // We use this state to trigger re-renders when freezing, 
-  // but we don't need to pass it to the annotation anymore.
-  const [frozenPosition, setFrozenPosition] = React.useState(null);
+  // Use a ref to track the accumulated angle. 
+  // Initialize with a random start angle so planets aren't all aligned.
+  const angleRef = useRef(Math.random() * Math.PI * 2);
 
   const texture = useTexture(textureFile);
+  const { camera } = useThree();
 
   useEffect(() => {
     if (isActive && !wasActiveRef.current && meshRef.current) {
       // Planet just became active - freeze position
+      // meshRef now refers to the group, which holds the planet's orbital position
       const currentPos = meshRef.current.position;
       const frozen = [currentPos.x, currentPos.y, currentPos.z];
       frozenPositionRef.current = frozen;
-      setFrozenPosition(frozen);
 
       // Notify parent
       if (onPositionUpdate) {
         onPositionUpdate(frozen);
       }
-
-      // Delay showing annotation
-      setTimeout(() => {
-        setShowAnnotation(true);
-      }, 1500);
     } else if (!isActive && wasActiveRef.current) {
       // Planet just became inactive
       frozenPositionRef.current = null;
-      setFrozenPosition(null);
-      setShowAnnotation(false);
     }
     wasActiveRef.current = isActive;
   }, [isActive, onPositionUpdate]);
 
-  useFrame(({ clock }) => {
+  useFrame((state, delta) => {
     if (isActive && frozenPositionRef.current) {
-      // Keep frozen
+      // Keep frozen at the stored position
       if (meshRef.current) {
         meshRef.current.position.set(
           frozenPositionRef.current[0],
@@ -63,26 +54,31 @@ function Planet({
         );
       }
     } else {
-      // Orbit
-      const elapsedTime = clock.getElapsedTime();
-      const x = Math.sin(elapsedTime * speed) * distance;
-      const z = Math.cos(elapsedTime * speed) * distance;
+      // Orbit: Update angle based on speed and delta time
+      // This ensures we resume exactly where we left off
+      angleRef.current += speed * delta;
+
+      const x = Math.sin(angleRef.current) * distance;
+      const z = Math.cos(angleRef.current) * distance;
 
       if (meshRef.current) {
         meshRef.current.position.set(x, 0, z);
       }
     }
+
+    // Rotate the planet itself (only when not active)
+    if (planetMeshRef.current && !isActive) {
+      planetMeshRef.current.rotation.y += 0.005;
+    }
   });
 
   return (
-    <mesh
+    <group
       ref={meshRef}
       onClick={(e) => {
         e.stopPropagation();
-        // CHANGED: Only set active if it isn't already. 
-        // We removed the toggle logic (isActive ? null : name)
-        if (!isActive) {
-          setActive(name);
+        if (!isActive && onSelect) {
+          onSelect(name);
         }
       }}
       onPointerOver={(e) => {
@@ -93,20 +89,12 @@ function Planet({
         document.body.style.cursor = 'default';
       }}
     >
-      <sphereGeometry args={[size * 2, 32, 32]} />
-      <meshStandardMaterial map={texture} />
-
-      {/* Annotation is now a child of the mesh.
-         It will automatically be positioned at the planet's center (0,0,0 local).
-         The ProjectAnnotation component handles the offset to the right.
-      */}
-      {isActive && frozenPosition && !isAnimating && (
-        <ProjectAnnotation
-          planetSize={size * 2}
-          isVisible={showAnnotation}
-        />
-      )}
-    </mesh>
+      {/* The rotating planet mesh */}
+      <mesh ref={planetMeshRef}>
+        <sphereGeometry args={[size * 2, 32, 32]} />
+        <meshStandardMaterial map={texture} />
+      </mesh>
+    </group>
   );
 }
 
