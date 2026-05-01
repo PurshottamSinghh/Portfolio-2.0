@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
+import * as THREE from 'three';
 
 function Planet({
   distance = 10,
@@ -14,8 +15,16 @@ function Planet({
 }) {
   const meshRef = useRef();
   const planetMeshRef = useRef();
+  const materialRef = useRef();
   const frozenPositionRef = useRef(null);
   const wasActiveRef = useRef(false);
+
+  // Hover state
+  const [hovered, setHovered] = useState(false);
+
+  // Smoothed values for animation (refs to avoid re-renders)
+  const scaleRef = useRef(1);
+  const emissiveRef = useRef(0);
 
   // Use a ref to track the accumulated angle. 
   // Initialize with a random start angle so planets aren't all aligned.
@@ -70,6 +79,26 @@ function Planet({
     if (planetMeshRef.current && !isActive) {
       planetMeshRef.current.rotation.y += 0.005;
     }
+
+    // ── Smooth hover animation ──────────────────────────────
+    // Lerp scale: target is 1.15 when hovered, 1.0 when not
+    const targetScale = hovered ? 1.15 : 1.0;
+    scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, targetScale, 6 * delta);
+
+    // Lerp emissive: target is 0.35 when hovered, 0 when not
+    const targetEmissive = hovered ? 0.35 : 0;
+    emissiveRef.current = THREE.MathUtils.lerp(emissiveRef.current, targetEmissive, 6 * delta);
+
+    // Apply smooth scale to planet mesh
+    if (planetMeshRef.current) {
+      const s = scaleRef.current;
+      planetMeshRef.current.scale.set(s, s, s);
+    }
+
+    // Apply smooth emissive intensity to material
+    if (materialRef.current) {
+      materialRef.current.emissiveIntensity = emissiveRef.current;
+    }
   });
 
   return (
@@ -83,16 +112,23 @@ function Planet({
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
+        setHovered(true);
         document.body.style.cursor = 'pointer';
       }}
       onPointerOut={() => {
+        setHovered(false);
         document.body.style.cursor = 'default';
       }}
     >
       {/* The rotating planet mesh */}
       <mesh ref={planetMeshRef}>
         <sphereGeometry args={[size * 2, 32, 32]} />
-        <meshStandardMaterial map={texture} />
+        <meshStandardMaterial
+          ref={materialRef}
+          map={texture}
+          emissive={new THREE.Color(0.6, 0.7, 1.0)}
+          emissiveIntensity={0}
+        />
       </mesh>
     </group>
   );
