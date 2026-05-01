@@ -29,13 +29,12 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Core Profile",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+    extendedDetails: "",
     collaborators: ["University of Toledo", "City of Toledo", "Open Source"],
     documentLinks: [
-      { label: "Resume", url: "#" },
-      { label: "LinkedIn", url: "#" },
-      { label: "GitHub", url: "#" },
+      { label: "Resume", url: "/Purshottam_Singh_Resume.docx" },
+      { label: "LinkedIn", url: "https://www.linkedin.com/in/purshottam-singh/" },
+      { label: "GitHub", url: "https://github.com/PurshottamSinghh" },
     ],
   },
 
@@ -55,8 +54,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.",
+    extendedDetails: "",
     collaborators: ["Team of 4 developers"],
     documentLinks: [
       { label: "Source Code", url: "#" },
@@ -76,8 +74,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras mattis consectetur purus sit amet fermentum. Maecenas sed diam eget risus varius blandit sit amet non magna.",
+    extendedDetails: "",
     collaborators: ["City of Toledo IT Department"],
     documentLinks: [
       { label: "Source Code", url: "#" },
@@ -96,8 +93,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacinia bibendum nulla sed consectetur. Donec sed odio dui. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+    extendedDetails: "",
     collaborators: ["Solo Project"],
     documentLinks: [
       { label: "Source Code", url: "#" },
@@ -117,8 +113,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Nullam quis risus eget urna mollis ornare vel eu leo.",
+    extendedDetails: "",
     collaborators: ["University of Toledo"],
     documentLinks: [
       { label: "Source Code", url: "#" },
@@ -137,8 +132,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.",
+    extendedDetails: "",
     collaborators: ["Academic Research Team"],
     documentLinks: [
       { label: "Research Paper", url: "#" },
@@ -157,8 +151,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta sem malesuada magna mollis euismod. Donec ullamcorper nulla non metus auctor fringilla.",
+    extendedDetails: "",
     collaborators: ["Hackathon Team"],
     documentLinks: [
       { label: "Source Code", url: "#" },
@@ -178,8 +171,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+    extendedDetails: "",
     collaborators: ["Solo Project"],
     documentLinks: [
       { label: "Source Code", url: "#" },
@@ -198,8 +190,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+    extendedDetails: "",
     collaborators: ["IEEE Conference"],
     documentLinks: [
       { label: "IEEE Paper", url: "#" },
@@ -223,8 +214,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Experiences",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.",
+    extendedDetails: "",
     collaborators: ["UToledo Athletic Department"],
     documentLinks: [],
   },
@@ -241,8 +231,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Experiences",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id dolor id nibh ultricies vehicula ut id elit. Maecenas faucibus mollis interdum.",
+    extendedDetails: "",
     collaborators: ["City of Toledo", "Toledo Codes"],
     documentLinks: [],
   },
@@ -259,8 +248,7 @@ const projectsData = [
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Experiences",
-    extendedDetails:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur blandit tempus porttitor. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.",
+    extendedDetails: "",
     collaborators: ["UToledo Sustainability Office"],
     documentLinks: [],
   },
