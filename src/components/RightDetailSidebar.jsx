@@ -1,17 +1,13 @@
 import React, { useEffect } from 'react';
+import ConnectSection from './ConnectSection';
 import './RightDetailSidebar.css';
 
 /**
  * RightDetailSidebar
  * 
- * A sliding panel that animates in from the right side of the screen.
- * Displays extended project details, collaborators, and document links
- * for the currently active node.
- * 
- * Props:
- *  - isOpen: boolean controlling visibility
- *  - onClose: callback to close the panel
- *  - projectData: the active project data object from projectsData.js
+ * Liquid Glass sliding panel from the right edge.
+ * Renders extended project details, structured sections (for Core Profile),
+ * collaborators, document links, and a ConnectSection for the Core Profile.
  */
 function RightDetailSidebar({ isOpen, onClose, projectData }) {
   // Close on Escape key
@@ -25,6 +21,9 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
 
   if (!projectData) return null;
 
+  const isStructured = Array.isArray(projectData.extendedDetails);
+  const isCoreProfile = projectData.category === 'Me';
+
   return (
     <div className={`right-sidebar ${isOpen ? 'right-sidebar--open' : ''}`}>
       {/* Close Button */}
@@ -36,14 +35,14 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
         <span className="right-sidebar__close-x">✕</span>
       </button>
 
-      {/* Animated Scanline */}
-      <div className="right-sidebar__scanline"></div>
+      {/* Chromatic edge accent */}
+      <div className="right-sidebar__chroma-edge"></div>
 
       {/* Scrollable Content */}
       <div className="right-sidebar__content">
         {/* Header */}
         <div className="right-sidebar__header">
-          <span className="right-sidebar__label">FULL SPECIFICATIONS</span>
+          <span className="right-sidebar__label">Full Specifications</span>
           <h2 className="right-sidebar__title">{projectData.projectTitle}</h2>
           <div className="right-sidebar__category-badge">
             {projectData.category}
@@ -75,11 +74,21 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
 
         <div className="right-sidebar__divider"></div>
 
-        {/* Extended Details */}
+        {/* Overview / Extended Details */}
         <div className="right-sidebar__section">
           <h3 className="right-sidebar__section-title">Overview</h3>
           <p className="right-sidebar__text">{projectData.description}</p>
-          {projectData.extendedDetails && (
+
+          {/* Structured sections (for Core Profile) */}
+          {isStructured && projectData.extendedDetails.map((section, i) => (
+            <div key={i} className="right-sidebar__bio-section">
+              <h4 className="right-sidebar__bio-title">{section.title}</h4>
+              <p className="right-sidebar__bio-text">{section.content}</p>
+            </div>
+          ))}
+
+          {/* Plain string extended details (for other entries) */}
+          {!isStructured && projectData.extendedDetails && (
             <p className="right-sidebar__text right-sidebar__text--extended">
               {projectData.extendedDetails}
             </p>
@@ -135,6 +144,17 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
                   </a>
                 ))}
               </div>
+            </div>
+          </>
+        )}
+
+        {/* Connect Section — only for Core Profile */}
+        {isCoreProfile && (
+          <>
+            <div className="right-sidebar__divider"></div>
+            <div className="right-sidebar__section">
+              <h3 className="right-sidebar__section-title">Connect With Me</h3>
+              <ConnectSection />
             </div>
           </>
         )}

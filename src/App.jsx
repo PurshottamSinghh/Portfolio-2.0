@@ -38,6 +38,7 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showHologram, setShowHologram] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isCardExiting, setIsCardExiting] = useState(false);
   const orbitControlsRef = useRef(null);
 
   // ── Planet Configuration ────────────────────────────────
@@ -136,12 +137,24 @@ function App() {
 
   // ── Right Detail Sidebar ───────────────────────────────
   const handleOpenDetail = useCallback(() => {
+    // 1. Trigger the card exit animation
+    setIsCardExiting(true);
+    // 2. Open the detail panel simultaneously
     setIsDetailOpen(true);
+    // 3. After exit animation completes, unmount the card
+    setTimeout(() => {
+      setShowHologram(false);
+      setIsCardExiting(false);
+    }, 400);
   }, []);
 
   const handleCloseDetail = useCallback(() => {
     setIsDetailOpen(false);
-  }, []);
+    // Restore the holographic card if a planet is still active
+    if (activePlanet) {
+      setShowHologram(true);
+    }
+  }, [activePlanet]);
 
   // ── Derived Data ───────────────────────────────────────
   const activePlanetData = planetsData.find(p => p.name === activePlanet);
@@ -214,6 +227,7 @@ function App() {
             planetPosition={planetPosition}
             planetSize={16}
             visible={showHologram && !isAnimating}
+            isExiting={isCardExiting}
             onMoreInfo={handleOpenDetail}
           />
         )}
@@ -250,6 +264,7 @@ function App() {
                 planetPosition={planetPosition}
                 planetSize={planet.size}
                 visible={showHologram && !isAnimating}
+                isExiting={isCardExiting}
                 onMoreInfo={handleOpenDetail}
               />
             )}

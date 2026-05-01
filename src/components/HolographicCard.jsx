@@ -16,7 +16,7 @@ import './HolographicCard.css';
  *  - visible: whether the card should be shown (after camera settles)
  *  - onMoreInfo: callback to open the right detail sidebar
  */
-function HolographicCard({ projectData, planetPosition, planetSize, visible, onMoreInfo }) {
+function HolographicCard({ projectData, planetPosition, planetSize, visible, isExiting, onMoreInfo }) {
   const [isRevealed, setIsRevealed] = useState(false);
 
   // Staggered reveal after becoming visible
@@ -29,7 +29,7 @@ function HolographicCard({ projectData, planetPosition, planetSize, visible, onM
     }
   }, [visible]);
 
-  if (!projectData || !planetPosition || !visible) return null;
+  if (!projectData || !planetPosition || (!visible && !isExiting)) return null;
 
   return (
     <Html
@@ -44,7 +44,7 @@ function HolographicCard({ projectData, planetPosition, planetSize, visible, onM
         transformOrigin: 'left center',
       }}
     >
-      <div className={`holo-card ${isRevealed ? 'holo-card--visible' : ''}`}>
+      <div className={`holo-card ${isRevealed ? 'holo-card--visible' : ''} ${isExiting ? 'holo-card--exiting' : ''}`}>
         {/* Connection line from planet to card */}
         <div className="holo-card__connector">
           <div className="holo-card__connector-dot"></div>

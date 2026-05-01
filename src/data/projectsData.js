@@ -3,17 +3,18 @@
  * Centralized data architecture mapping each celestial body to a portfolio entry.
  * 
  * Categories:
- *   "Core Profile"  — The Sun (About Me)
- *   "Projects"      — Technical projects
- *   "Experiences"   — Professional experiences & fellowships
+ *   "Me"           — The Sun (Core Profile / About Me)
+ *   "Experiences"  — Professional roles & fellowships
+ *   "Projects"     — Technical builds
  * 
- * Each entry includes holographic UI fields and extended detail fields
- * for the right-side detail panel.
+ * The `extendedDetails` field supports two formats:
+ *   - String: rendered as a single paragraph in the detail sidebar
+ *   - Array of { title, content } objects: rendered as structured sections
  */
 
 const projectsData = [
   // ═══════════════════════════════════════════════════════════
-  //  CORE PROFILE — The Sun
+  //  ME — The Sun (Core Profile)
   // ═══════════════════════════════════════════════════════════
   {
     id: "sun",
@@ -27,9 +28,40 @@ const projectsData = [
     statusIcon: "☀",
     telemetry: "Open to Opportunities",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
-    category: "Core Profile",
-    extendedDetails: "",
+    sourceUrl: "https://github.com/PurshottamSinghh",
+    category: "Me",
+    extendedDetails: [
+      {
+        title: "Background & Education",
+        content:
+          "I'm a 22-year-old Computer Science student at the University of Toledo, graduating in Summer 2027. Currently, I serve as a Data Science Intern for UT Athletics, where I develop anomaly detection systems and manage business intelligence infrastructure.",
+      },
+      {
+        title: "Career Focus",
+        content:
+          "I am actively pursuing a full-time software engineering internship, with a particular interest in AI and Deep Learning applications.",
+      },
+      {
+        title: "Technical Journey",
+        content:
+          "Driven by curiosity across the full software stack — from studying how LLMs work under the hood, to tracking the rapid evolution of AI technologies, to mastering front-end, back-end, and database systems. This breadth has led to projects spanning full-stack web applications, computer vision models, and interactive 3D experiences like the one you're exploring right now.",
+      },
+      {
+        title: "Philosophy",
+        content:
+          "A deep appreciation for physics and mathematics drew me to computer science — a field where you can build something extraordinary with nothing more than a laptop and an idea. Like a mathematician, I find satisfaction in solving complex problems using just my mind and the tools at hand.",
+      },
+      {
+        title: "Long-Term Vision",
+        content:
+          "My ultimate goal is to create something that meaningfully advances society through technology. I want to leave this world having contributed to humanity's progress toward a better future. On the grandest timescale — perhaps impossible in a single lifetime — I aspire to help advance civilization toward a Type II rating on the Kardashev Scale.",
+      },
+      {
+        title: "Beyond the Code",
+        content:
+          "When I'm not building, you'll find me playing pool, table tennis, or chess. I also enjoy cricket, volleyball, and going trekking and hiking with friends — a reminder that the best algorithms are the ones that get you outside.",
+      },
+    ],
     collaborators: ["University of Toledo", "City of Toledo", "Open Source"],
     documentLinks: [
       { label: "Resume", url: "/Purshottam_Singh_Resume.docx" },
@@ -180,7 +212,7 @@ const projectsData = [
   {
     id: "neptune",
     planetName: "Neptune",
-    projectTitle: "High Availability Load Balancer",
+    projectTitle: "I.R.I.S.",
     description:
       "Developed a High Availability LAMP stack with automated load balancing and backup functionality, accepted for presentation.",
     techStack: ["LAMP Stack", "Linux", "Networking"],

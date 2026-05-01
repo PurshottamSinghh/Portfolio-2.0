@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useMemo } from 'react';
+import ConnectSection from './ConnectSection';
 import './SlidingSidebar.css';
 
 /**
  * SlidingSidebar
  * 
- * Groups projects by category (Core Profile, Projects, Experiences)
- * and renders them in distinct sections with headers.
+ * Groups projects by category in display order:
+ *   ME → EXPERIENCES → PROJECTS
+ * Includes a ConnectSection in the footer.
  */
 function SlidingSidebar({ isOpen, onToggle, projects, activePlanet, onSelectProject }) {
   const sidebarRef = useRef(null);
@@ -21,7 +23,7 @@ function SlidingSidebar({ isOpen, onToggle, projects, activePlanet, onSelectProj
 
   // Group projects by category, in display order
   const groupedProjects = useMemo(() => {
-    const categoryOrder = ['Core Profile', 'Projects', 'Experiences'];
+    const categoryOrder = ['Me', 'Experiences', 'Projects'];
     const groups = {};
 
     categoryOrder.forEach(cat => {
@@ -77,7 +79,7 @@ function SlidingSidebar({ isOpen, onToggle, projects, activePlanet, onSelectProj
                 <span className="sidebar__group-icon">
                   {getCategoryIcon(category)}
                 </span>
-                <span className="sidebar__group-label">{category}</span>
+                <span className="sidebar__group-label">{getCategoryLabel(category)}</span>
                 <span className="sidebar__group-count">{items.length}</span>
               </div>
 
@@ -119,22 +121,33 @@ function SlidingSidebar({ isOpen, onToggle, projects, activePlanet, onSelectProj
           ))}
         </div>
 
-        {/* Footer */}
+        {/* Footer with Connect Section */}
         <div className="sidebar__footer">
           <div className="sidebar__footer-line"></div>
           <span className="sidebar__footer-text">
             {projects.length} Nodes · System Active
           </span>
+          <ConnectSection compact />
         </div>
       </div>
     </>
   );
 }
 
+/** Returns a display label for each category */
+function getCategoryLabel(category) {
+  switch (category) {
+    case 'Me': return 'Core System';
+    case 'Projects': return 'Projects';
+    case 'Experiences': return 'Experiences';
+    default: return category;
+  }
+}
+
 /** Returns a category icon */
 function getCategoryIcon(category) {
   switch (category) {
-    case 'Core Profile': return '☀';
+    case 'Me': return '☀';
     case 'Projects': return '◈';
     case 'Experiences': return '◆';
     default: return '○';
@@ -157,7 +170,7 @@ function getPlanetColor(planetName) {
     Makemake: '#c49882',
     Haumea: '#9a9a9a',
   };
-  return colors[planetName] || '#4da6ff';
+  return colors[planetName] || '#888888';
 }
 
 export default SlidingSidebar;

@@ -1,6 +1,7 @@
 /* ============================================================
    RightDetailSidebar.css
-   Right-side sliding detail panel with sci-fi console aesthetics
+   LIQUID GLASS — High-refractive detail panel (right side)
+   Chromatic edges, depth blur, noise grain
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
@@ -11,20 +12,23 @@
   right: 0;
   top: 0;
   bottom: 0;
-  width: 380px;
+  width: 400px;
   z-index: 1500;
   background: linear-gradient(
     225deg,
-    rgba(6, 12, 24, 0.96) 0%,
-    rgba(10, 18, 32, 0.94) 50%,
-    rgba(6, 14, 28, 0.96) 100%
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.04) 100%
   );
-  backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(77, 210, 255, 0.12);
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
   transform: translateX(100%);
   transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  box-shadow: -4px 0 40px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    -4px 0 40px rgba(0, 0, 0, 0.5),
+    0 0 0 0.5px rgba(255, 255, 255, 0.04) inset;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -34,30 +38,47 @@
   transform: translateX(0);
 }
 
-
-/* ── Scanline ─────────────────────────────────────────────── */
-.right-sidebar__scanline {
+/* Chromatic edge — left border (red → blue gradient) */
+.right-sidebar__chroma-edge {
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
+  left: -1px;
+  bottom: 0;
+  width: 1px;
   background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(77, 210, 255, 0.4),
-    transparent
+    180deg,
+    rgba(255, 120, 120, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(120, 160, 255, 0.15) 100%
   );
-  animation: rightScanline 5s linear infinite;
   z-index: 10;
   pointer-events: none;
 }
 
-@keyframes rightScanline {
-  0% { top: 0; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+/* Animated glass sheen */
+.right-sidebar::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  right: 0;
+  height: 200%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.015) 45%,
+    rgba(255, 255, 255, 0.04) 50%,
+    rgba(255, 255, 255, 0.015) 55%,
+    transparent 100%
+  );
+  animation: rightGlassSheen 10s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes rightGlassSheen {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(50%); }
 }
 
 
@@ -69,8 +90,8 @@
   z-index: 20;
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(77, 210, 255, 0.2);
-  background: rgba(77, 210, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(8px);
   border-radius: 8px;
   cursor: pointer;
@@ -81,13 +102,13 @@
 }
 
 .right-sidebar__close:hover {
-  border-color: rgba(77, 210, 255, 0.5);
-  background: rgba(77, 210, 255, 0.1);
-  box-shadow: 0 0 16px rgba(77, 210, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.05);
 }
 
 .right-sidebar__close-x {
-  color: rgba(77, 210, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 14px;
   line-height: 1;
 }
@@ -99,7 +120,9 @@
   overflow-y: auto;
   padding: 28px 28px 32px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(77, 210, 255, 0.15) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+  position: relative;
+  z-index: 1;
 }
 
 .right-sidebar__content::-webkit-scrollbar {
@@ -111,7 +134,7 @@
 }
 
 .right-sidebar__content::-webkit-scrollbar-thumb {
-  background: rgba(77, 210, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 
@@ -122,7 +145,7 @@
   font-size: 9px;
   font-weight: 500;
   letter-spacing: 2.5px;
-  color: rgba(77, 210, 255, 0.45);
+  color: rgba(255, 255, 255, 0.3);
   text-transform: uppercase;
   display: block;
   margin-bottom: 8px;
@@ -131,11 +154,10 @@
 .right-sidebar__title {
   font-size: 22px;
   font-weight: 600;
-  color: rgba(230, 240, 255, 0.95);
+  color: rgba(255, 255, 255, 0.95);
   margin: 0 0 12px;
   letter-spacing: 0.3px;
   line-height: 1.2;
-  text-shadow: 0 0 20px rgba(77, 210, 255, 0.1);
   padding-right: 40px; /* Avoid close button overlap */
 }
 
@@ -146,9 +168,9 @@
   font-weight: 400;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: rgba(120, 255, 200, 0.7);
-  background: rgba(120, 255, 200, 0.06);
-  border: 1px solid rgba(120, 255, 200, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 4px 12px;
 }
@@ -160,24 +182,20 @@
   height: 1px;
   background: linear-gradient(
     90deg,
-    rgba(77, 210, 255, 0.15),
-    rgba(77, 210, 255, 0.03)
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.02)
   );
 }
 
 
 /* ── Sections ─────────────────────────────────────────────── */
-.right-sidebar__section {
-  /* no extra margin; dividers handle spacing */
-}
-
 .right-sidebar__section-title {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: rgba(77, 210, 255, 0.5);
+  color: rgba(255, 255, 255, 0.35);
   margin: 0 0 14px;
 }
 
@@ -185,14 +203,61 @@
   font-size: 12.5px;
   font-weight: 300;
   line-height: 1.7;
-  color: rgba(180, 200, 220, 0.75);
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
   letter-spacing: 0.2px;
 }
 
 .right-sidebar__text--extended {
   margin-top: 12px;
-  color: rgba(160, 180, 200, 0.6);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+
+/* ── Structured Bio Sections (Core Profile) ───────────────── */
+.right-sidebar__bio-section {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle chromatic top edge on bio cards */
+.right-sidebar__bio-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 120, 120, 0.1),
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(120, 160, 255, 0.1)
+  );
+}
+
+.right-sidebar__bio-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 8px;
+}
+
+.right-sidebar__bio-text {
+  font-size: 12.5px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  letter-spacing: 0.2px;
 }
 
 
@@ -208,15 +273,14 @@
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  background: rgba(77, 210, 255, 0.03);
-  border: 1px solid rgba(77, 210, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 10px;
 }
 
 .right-sidebar__metric-icon {
   font-size: 16px;
-  color: rgba(120, 255, 200, 0.6);
-  text-shadow: 0 0 8px rgba(120, 255, 200, 0.2);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .right-sidebar__metric-info {
@@ -232,14 +296,14 @@
   font-weight: 400;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: rgba(77, 210, 255, 0.35);
+  color: rgba(255, 255, 255, 0.25);
 }
 
 .right-sidebar__metric-value {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   font-weight: 500;
-  color: rgba(200, 220, 240, 0.85);
+  color: rgba(255, 255, 255, 0.75);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -258,18 +322,18 @@
   font-size: 11px;
   font-weight: 400;
   padding: 6px 14px;
-  background: rgba(77, 210, 255, 0.05);
-  border: 1px solid rgba(77, 210, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  color: rgba(180, 220, 240, 0.75);
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: 0.5px;
   transition: all 0.2s ease;
 }
 
 .right-sidebar__tech-tag:hover {
-  background: rgba(77, 210, 255, 0.1);
-  border-color: rgba(77, 210, 255, 0.3);
-  color: rgba(220, 240, 255, 0.9);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 
@@ -287,7 +351,7 @@
   padding: 8px 0;
   font-size: 12px;
   font-weight: 400;
-  color: rgba(200, 215, 230, 0.7);
+  color: rgba(255, 255, 255, 0.55);
   letter-spacing: 0.2px;
 }
 
@@ -295,7 +359,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(77, 210, 255, 0.5);
+  background: rgba(255, 255, 255, 0.35);
   flex-shrink: 0;
 }
 
@@ -312,10 +376,10 @@
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: rgba(77, 210, 255, 0.03);
-  border: 1px solid rgba(77, 210, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
-  color: rgba(77, 210, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   font-weight: 400;
@@ -326,19 +390,19 @@
 }
 
 .right-sidebar__link:hover {
-  background: rgba(77, 210, 255, 0.08);
-  border-color: rgba(77, 210, 255, 0.25);
-  color: rgba(77, 210, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.95);
   transform: translateX(3px);
 }
 
 .right-sidebar__link-icon {
   font-size: 13px;
-  color: rgba(77, 210, 255, 0.5);
+  color: rgba(255, 255, 255, 0.4);
   transition: transform 0.2s ease;
 }
 
 .right-sidebar__link:hover .right-sidebar__link-icon {
   transform: translateX(3px);
-  color: rgba(77, 210, 255, 0.9);
+  color: rgba(255, 255, 255, 0.8);
 }
