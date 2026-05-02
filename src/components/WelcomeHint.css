@@ -1,0 +1,124 @@
+/* ============================================================
+   WelcomeHint.css
+   First-visit discovery overlay — liquid glass aesthetic
+   ============================================================ */
+
+.welcome-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  animation: hintFadeIn 0.8s ease-out;
+}
+
+.welcome-hint--exiting {
+  animation: hintFadeOut 0.5s ease-in forwards;
+}
+
+@keyframes hintFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hintFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+
+/* ── Card ─────────────────────────────────────────────────── */
+.welcome-hint__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 40px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 0.5px rgba(255, 255, 255, 0.04) inset;
+  animation: hintCardIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes hintCardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+
+/* ── Tap Icon ─────────────────────────────────────────────── */
+.welcome-hint__icon {
+  position: relative;
+  color: rgba(255, 255, 255, 0.7);
+  animation: hintTap 2s ease-in-out infinite;
+}
+
+@keyframes hintTap {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(4px) scale(0.95); }
+  50% { transform: translateY(0) scale(1); }
+}
+
+/* Ripple ring from tap */
+.welcome-hint__ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  animation: hintRipple 2s ease-out infinite;
+}
+
+@keyframes hintRipple {
+  0%, 25% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.6;
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+/* ── Text ─────────────────────────────────────────────────── */
+.welcome-hint__text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.3px;
+  text-align: center;
+  margin: 0;
+}
+
+.welcome-hint__subtext {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

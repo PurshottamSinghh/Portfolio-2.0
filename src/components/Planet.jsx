@@ -16,6 +16,7 @@ function Planet({
   const meshRef = useRef();
   const planetMeshRef = useRef();
   const materialRef = useRef();
+  const ringMaterialRef = useRef();
   const frozenPositionRef = useRef(null);
   const wasActiveRef = useRef(false);
 
@@ -36,7 +37,6 @@ function Planet({
   useEffect(() => {
     if (isActive && !wasActiveRef.current && meshRef.current) {
       // Planet just became active - freeze position
-      // meshRef now refers to the group, which holds the planet's orbital position
       const currentPos = meshRef.current.position;
       const frozen = [currentPos.x, currentPos.y, currentPos.z];
       frozenPositionRef.current = frozen;
@@ -64,7 +64,6 @@ function Planet({
       }
     } else {
       // Orbit: Update angle based on speed and delta time
-      // This ensures we resume exactly where we left off
       angleRef.current += speed * delta;
 
       const x = Math.sin(angleRef.current) * distance;
@@ -81,25 +80,35 @@ function Planet({
     }
 
     // ── Smooth hover animation ──────────────────────────────
-    // Lerp scale: target is 1.15 when hovered, 1.0 when not
     const targetScale = hovered ? 1.15 : 1.0;
     scaleRef.current = THREE.MathUtils.lerp(scaleRef.current, targetScale, 6 * delta);
 
-    // Lerp emissive: target is 0.35 when hovered, 0 when not
     const targetEmissive = hovered ? 0.35 : 0;
     emissiveRef.current = THREE.MathUtils.lerp(emissiveRef.current, targetEmissive, 6 * delta);
 
-    // Apply smooth scale to planet mesh
     if (planetMeshRef.current) {
       const s = scaleRef.current;
       planetMeshRef.current.scale.set(s, s, s);
     }
 
-    // Apply smooth emissive intensity to material
     if (materialRef.current) {
       materialRef.current.emissiveIntensity = emissiveRef.current;
     }
+
+    // ── Pulsing interaction ring ─────────────────────────────
+    if (ringMaterialRef.current && !isActive) {
+      const pulse = Math.sin(state.clock.elapsedTime * 1.8) * 0.5 + 0.5; // 0→1
+      const baseOpacity = hovered ? 0.3 : 0.1;
+      const pulseAmount = hovered ? 0.2 : 0.1;
+      ringMaterialRef.current.opacity = baseOpacity + pulse * pulseAmount;
+    } else if (ringMaterialRef.current && isActive) {
+      // Hide ring when planet is selected
+      ringMaterialRef.current.opacity = 0;
+    }
   });
+
+  const ringInner = size * 2 + 0.4;
+  const ringOuter = size * 2 + 0.7;
 
   return (
     <group
@@ -128,6 +137,18 @@ function Planet({
           map={texture}
           emissive={new THREE.Color(0.6, 0.7, 1.0)}
           emissiveIntensity={0}
+        />
+      </mesh>
+
+      {/* Pulsing interaction ring — signals clickability */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[ringInner, ringOuter, 64]} />
+        <meshBasicMaterial
+          ref={ringMaterialRef}
+          color="#ffffff"
+          transparent
+          opacity={0.1}
+          side={THREE.DoubleSide}
         />
       </mesh>
     </group>

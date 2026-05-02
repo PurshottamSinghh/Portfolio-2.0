@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
@@ -13,6 +13,8 @@ import CameraController from './components/CameraController';
 import SlidingSidebar from './components/SlidingSidebar';
 import HolographicCard from './components/HolographicCard';
 import RightDetailSidebar from './components/RightDetailSidebar';
+import WelcomeHint from './components/WelcomeHint';
+import MobileProjectCard from './components/MobileProjectCard';
 
 // Data
 import projectsData from './data/projectsData';
@@ -39,7 +41,16 @@ function App() {
   const [showHologram, setShowHologram] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isCardExiting, setIsCardExiting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const orbitControlsRef = useRef(null);
+
+  // ── Mobile Detection ───────────────────────────────────
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // ── Planet Configuration ────────────────────────────────
   const planetsData = [
@@ -164,6 +175,9 @@ function App() {
 
   return (
     <>
+      {/* Welcome Hint — first-visit discovery overlay */}
+      <WelcomeHint />
+
       {/* Back to Overview Button */}
       {activePlanet && (
         <button
@@ -194,6 +208,16 @@ function App() {
         projectData={activeProjectData}
       />
 
+      {/* Mobile Project Card — bottom sheet outside Canvas */}
+      {isMobile && (
+        <MobileProjectCard
+          projectData={activeProjectData}
+          visible={showHologram && !isAnimating}
+          isExiting={isCardExiting}
+          onMoreInfo={handleOpenDetail}
+        />
+      )}
+
       {/* 3D Canvas */}
       <Canvas
         dpr={[1, 1.5]}
@@ -223,8 +247,8 @@ function App() {
           onSelect={handleSelectProject}
         />
 
-        {/* Sun's Holographic Card — rendered when Sun is active */}
-        {activePlanet === 'Sun' && (
+        {/* Sun's Holographic Card — desktop only, rendered in 3D space */}
+        {!isMobile && activePlanet === 'Sun' && (
           <HolographicCard
             projectData={activeProjectData}
             planetPosition={planetPosition}
@@ -260,8 +284,8 @@ function App() {
               onPositionUpdate={handlePositionUpdate}
             />
 
-            {/* Holographic Card — rendered in 3D space near frozen planet */}
-            {activePlanet === planet.name && (
+            {/* Holographic Card — desktop only, rendered in 3D space near frozen planet */}
+            {!isMobile && activePlanet === planet.name && (
               <HolographicCard
                 projectData={activeProjectData}
                 planetPosition={planetPosition}

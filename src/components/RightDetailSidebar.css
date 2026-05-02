@@ -406,3 +406,24 @@
   transform: translateX(3px);
   color: rgba(255, 255, 255, 0.8);
 }
+
+
+/* ── Mobile Responsive ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .right-sidebar {
+    width: 100%;
+    border-left: none;
+  }
+
+  .right-sidebar__content {
+    padding: 24px 20px 28px;
+  }
+
+  .right-sidebar__title {
+    font-size: 19px;
+  }
+
+  .right-sidebar__bio-section {
+    padding: 14px;
+  }
+}

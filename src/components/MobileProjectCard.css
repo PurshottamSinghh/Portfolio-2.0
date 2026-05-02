@@ -1,0 +1,217 @@
+/* ============================================================
+   MobileProjectCard.css
+   Fixed bottom-sheet card for mobile viewports
+   Liquid glass aesthetic — only visible on screens ≤ 768px
+   ============================================================ */
+
+.mobile-card {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1200;
+  padding: 0 12px 16px;
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.mobile-card--visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-card--exiting {
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* ── Card Body ────────────────────────────────────────────── */
+.mobile-card__body {
+  position: relative;
+  padding: 18px 20px 16px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.07) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 -4px 30px rgba(0, 0, 0, 0.4),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+/* Chromatic edge — top */
+.mobile-card__body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 120, 120, 0.12),
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(120, 160, 255, 0.12)
+  );
+}
+
+
+/* ── Top accent ───────────────────────────────────────────── */
+.mobile-card__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 255, 255, 0.04) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+
+/* ── Header ───────────────────────────────────────────────── */
+.mobile-card__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.mobile-card__title {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+
+/* ── Description ──────────────────────────────────────────── */
+.mobile-card__description {
+  margin: 10px 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.15px;
+  /* Clamp to 3 lines on mobile */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* ── Divider ──────────────────────────────────────────────── */
+.mobile-card__divider {
+  margin: 12px 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.03)
+  );
+}
+
+
+/* ── Metrics ──────────────────────────────────────────────── */
+.mobile-card__metrics {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.mobile-card__metric {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mobile-card__metric-icon {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.mobile-card__metric-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.5px;
+}
+
+
+/* ── Tech Stack ───────────────────────────────────────────── */
+.mobile-card__tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.mobile-card__tech-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.5px;
+}
+
+
+/* ── View Full Specs Button ───────────────────────────────── */
+.mobile-card__more-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px 10px 56px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  justify-content: center;
+}
+
+.mobile-card__more-btn:active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.mobile-card__more-btn-icon {
+  font-size: 13px;
+}
