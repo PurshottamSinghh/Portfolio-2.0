@@ -42,6 +42,7 @@ function App() {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isCardExiting, setIsCardExiting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [selectionSource, setSelectionSource] = useState('canvas');
   const orbitControlsRef = useRef(null);
 
   // ── Mobile Detection ───────────────────────────────────
@@ -80,24 +81,23 @@ function App() {
   }, []);
 
   /**
-   * Called when the user selects a project from the sidebar or clicks a planet/Sun.
-   * Triggers the full sequence: close sidebar → set planet → camera animates.
+   * Called when the user selects a project from the SIDEBAR.
+   * Sets selectionSource to 'sidebar' for two-phase cinematic transit.
    */
-  const handleSelectProject = useCallback((planetName) => {
+  const handleSelectFromSidebar = useCallback((planetName) => {
     if (activePlanet === planetName) {
-      // Already viewing this node — just close sidebar
       setIsSidebarOpen(false);
       return;
     }
 
-    // 1. Close both sidebars
+    // Close both sidebars
     setIsSidebarOpen(false);
     setIsDetailOpen(false);
-
-    // 2. Hide any existing hologram immediately
     setShowHologram(false);
 
-    // 3. Handle Sun selection — position is always [0,0,0]
+    // Mark this as a sidebar selection
+    setSelectionSource('sidebar');
+
     if (planetName === 'Sun') {
       setActivePlanet('Sun');
       setPlanetPosition([0, 0, 0]);
@@ -105,9 +105,35 @@ function App() {
       return;
     }
 
-    // 4. Trigger planet selection (this drives freeze + camera)
     setActivePlanet(planetName);
-    setPlanetPosition(null); // Wait for planet to report its frozen position
+    setPlanetPosition(null);
+    setIsAnimating(true);
+  }, [activePlanet]);
+
+  /**
+   * Called when the user clicks a planet/Sun directly on the canvas.
+   * Sets selectionSource to 'canvas' for single-phase fluid transit.
+   */
+  const handleSelectFromCanvas = useCallback((planetName) => {
+    if (activePlanet === planetName) return;
+
+    // Close both sidebars
+    setIsSidebarOpen(false);
+    setIsDetailOpen(false);
+    setShowHologram(false);
+
+    // Mark this as a canvas click
+    setSelectionSource('canvas');
+
+    if (planetName === 'Sun') {
+      setActivePlanet('Sun');
+      setPlanetPosition([0, 0, 0]);
+      setIsAnimating(true);
+      return;
+    }
+
+    setActivePlanet(planetName);
+    setPlanetPosition(null);
     setIsAnimating(true);
   }, [activePlanet]);
 
@@ -198,7 +224,7 @@ function App() {
         onToggle={handleToggleSidebar}
         projects={projectsData}
         activePlanet={activePlanet}
-        onSelectProject={handleSelectProject}
+        onSelectProject={handleSelectFromSidebar}
       />
 
       {/* Right Detail Sidebar (HTML overlay, outside Canvas) */}
@@ -229,6 +255,7 @@ function App() {
           planetPosition={planetPosition}
           activePlanetSize={activePlanetSize}
           onAnimationComplete={handleAnimationComplete}
+          selectionSource={selectionSource}
         />
 
         <OrbitControls
@@ -244,7 +271,7 @@ function App() {
         {/* Sun — now clickable and selectable */}
         <Sun
           isActive={activePlanet === 'Sun'}
-          onSelect={handleSelectProject}
+          onSelect={handleSelectFromCanvas}
         />
 
         {/* Sun's Holographic Card — desktop only, rendered in 3D space */}
@@ -280,7 +307,7 @@ function App() {
               speed={calculateSpeed(planet.distance)}
               textureFile={planet.texture}
               isActive={activePlanet === planet.name}
-              onSelect={handleSelectProject}
+              onSelect={handleSelectFromCanvas}
               onPositionUpdate={handlePositionUpdate}
             />
 

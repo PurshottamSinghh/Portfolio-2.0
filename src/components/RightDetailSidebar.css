@@ -260,6 +260,39 @@
   letter-spacing: 0.2px;
 }
 
+/* ── Content Lists ────────────────────────────────────────── */
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.details-list li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.details-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 16px;
+  line-height: 1;
+  top: 4px;
+}
+
+/* Ensure font consistency for different types of lists */
+.details-list li.right-sidebar__bio-text,
+.details-list li.right-sidebar__text {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+}
+
 
 /* ── Metrics Grid ─────────────────────────────────────────── */
 .right-sidebar__metrics-grid {

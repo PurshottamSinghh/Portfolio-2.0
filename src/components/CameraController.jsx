@@ -1,167 +1,241 @@
 import { useEffect, useRef } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useThree, useFrame } from '@react-three/fiber';
 import { gsap } from 'gsap';
+import * as THREE from 'three';
 
-function CameraController({ activePlanet, planetPosition, activePlanetSize, onAnimationComplete }) {
+/**
+ * CameraController
+ *
+ * Cinematic camera system with two modes:
+ *
+ *   1. DIRECT CLICK (canvas click / planet-to-planet):
+ *      Single-phase fluid transit. Both position and lookAt target
+ *      smoothly interpolate simultaneously — zero snapping.
+ *
+ *   2. SIDEBAR SELECTION (two-phase cinematic):
+ *      Phase 1 — "The Search": Camera pans/rotates to visually locate
+ *               and center the target planet in the viewport.
+ *      Phase 2 — "The Approach": Camera travels toward the centered
+ *               target, keeping it locked in frame.
+ *
+ * Props:
+ *   - activePlanet:        string | null — name of selected planet
+ *   - planetPosition:      [x,y,z] | null — frozen world position
+ *   - activePlanetSize:    number — radius for zoom distance calc
+ *   - onAnimationComplete: () => void — fires after camera fully stops
+ *   - selectionSource:     'canvas' | 'sidebar' — how the selection was triggered
+ */
+function CameraController({
+  activePlanet,
+  planetPosition,
+  activePlanetSize,
+  onAnimationComplete,
+  selectionSource,
+}) {
   const { camera } = useThree();
-  const animationRef = useRef(null);
-  const isAnimatingRef = useRef(false);
 
-  // Constants for Overview
-  const overviewPosition = [0, 200, 0];
-  const overviewTarget = [0, 0, 0];
+  // ── Refs ──────────────────────────────────────────────
+  const timelineRef = useRef(null);
+  const prevPlanetRef = useRef(null);     // tracks last active planet name
+  const prevPositionRef = useRef(null);   // tracks last planet position
 
-  // Track History
-  const prevActivePlanetRef = useRef(null);
+  // The animated lookAt target — smoothly interpolated every frame
+  const lookAtTarget = useRef(new THREE.Vector3(0, 0, 0));
+  // Whether we should be actively driving lookAt from the ref
+  const isControlling = useRef(false);
 
-  // Initialize camera
+  // Constants
+  const OVERVIEW_POS = new THREE.Vector3(0, 200, 0);
+  const OVERVIEW_TARGET = new THREE.Vector3(0, 0, 0);
+
+  // ── Initialize ────────────────────────────────────────
   useEffect(() => {
-    camera.position.set(...overviewPosition);
-    camera.lookAt(...overviewTarget);
+    camera.position.copy(OVERVIEW_POS);
+    camera.lookAt(OVERVIEW_TARGET);
+    lookAtTarget.current.copy(OVERVIEW_TARGET);
   }, []);
 
-  useEffect(() => {
-    // Kill any running animation
-    if (animationRef.current) {
-      animationRef.current.kill();
+  // ── Per-frame lookAt driver ───────────────────────────
+  // This ensures the camera always looks at the animated target,
+  // providing smooth, jitter-free tracking during any GSAP tween.
+  useFrame(() => {
+    if (isControlling.current) {
+      camera.lookAt(lookAtTarget.current);
+    }
+  });
+
+  // ── Compute final camera position for a target ────────
+  const computeEndPosition = (targetPos, size, fromOverview) => {
+    const distFromOrigin = Math.sqrt(
+      targetPos[0] ** 2 + targetPos[1] ** 2 + targetPos[2] ** 2
+    );
+    const isSun = distFromOrigin < 1;
+
+    if (isSun) {
+      // Sun approach: fixed angle, well outside radius 16
+      const d = 40;
+      return [d * 0.7, d * 0.5, d * 0.7];
     }
 
-    // ---------------------------------------------------------
-    // SCENARIO A: Moving TO a Planet (Active Planet Set)
-    // ---------------------------------------------------------
-    if (activePlanet && planetPosition) {
-      isAnimatingRef.current = true;
-
-      const isFromOverview = prevActivePlanetRef.current === null;
-
-      // Target LookAt is ALWAYS the new planet center immediately
-      const targetLookAt = {
-        x: planetPosition[0],
-        y: planetPosition[1],
-        z: planetPosition[2]
+    if (fromOverview) {
+      // Eclipse View — behind the planet relative to the Sun
+      const dir = {
+        x: targetPos[0] / distFromOrigin,
+        z: targetPos[2] / distFromOrigin,
       };
+      const zoomDist = (size || 1) * 7.0;
+      return [
+        targetPos[0] + dir.x * zoomDist,
+        targetPos[1] + (size || 1) * 2,
+        targetPos[2] + dir.z * zoomDist,
+      ];
+    }
 
-      // Determine END Camera Position (The Flight Path)
-      let endCameraPos;
+    // Direct flight — approach from current camera direction
+    const cam = camera.position;
+    const toPlanet = {
+      x: targetPos[0] - cam.x,
+      y: targetPos[1] - cam.y,
+      z: targetPos[2] - cam.z,
+    };
+    const dist = Math.sqrt(toPlanet.x ** 2 + toPlanet.y ** 2 + toPlanet.z ** 2);
+    const dir = {
+      x: toPlanet.x / dist,
+      y: toPlanet.y / dist,
+      z: toPlanet.z / dist,
+    };
+    const stopDist = (size || 1) * 6.0;
+    const elevation = (size || 1) * 3.0;
 
-      // Check if this is the Sun (position at/near origin)
-      const distFromSun = Math.sqrt(planetPosition[0] ** 2 + planetPosition[1] ** 2 + planetPosition[2] ** 2);
-      const isSunTarget = distFromSun < 1;
+    return [
+      targetPos[0] - dir.x * stopDist,
+      targetPos[1] + elevation,
+      targetPos[2] - dir.z * stopDist,
+    ];
+  };
 
-      if (isSunTarget) {
-        // Special Sun handling: approach from a fixed angle
-        // Sun radius is 16, so stay well outside
-        const sunZoomDist = 40;
-        endCameraPos = [
-          sunZoomDist * 0.7,
-          sunZoomDist * 0.5,
-          sunZoomDist * 0.7
-        ];
+  // ── Main effect — drives all camera transitions ───────
+  useEffect(() => {
+    // Kill any in-progress timeline
+    if (timelineRef.current) {
+      timelineRef.current.kill();
+      timelineRef.current = null;
+    }
 
-      } else if (isFromOverview) {
-        // Path 1: Eclipse View (From Overview)
-        // Fly BEHIND the planet relative to Sun(0,0,0)
-        const dir = {
-          x: planetPosition[0] / distFromSun,
-          y: planetPosition[1] / distFromSun,
-          z: planetPosition[2] / distFromSun
-        };
-        const zoomDist = (activePlanetSize || 1) * 7.0;
+    // ═══════════════════════════════════════════════════════
+    //  SCENARIO A: Moving TO a planet/Sun
+    // ═══════════════════════════════════════════════════════
+    if (activePlanet && planetPosition) {
+      isControlling.current = true;
 
-        endCameraPos = [
-          planetPosition[0] + dir.x * zoomDist,
-          planetPosition[1] + (activePlanetSize || 1) * 2, // Highlight elevation
-          planetPosition[2] + dir.z * zoomDist
-        ];
+      const isFromOverview = prevPlanetRef.current === null;
+      const endPos = computeEndPosition(planetPosition, activePlanetSize, isFromOverview);
 
-      } else {
-        // Path 2: Direct Flight (From Planet)
-        // Fly to FRONT of planet relative to Current Camera
-        const cam = camera.position;
-        const toPlanet = {
-          x: planetPosition[0] - cam.x,
-          y: planetPosition[1] - cam.y,
-          z: planetPosition[2] - cam.z
-        };
-        const distToPlanet = Math.sqrt(toPlanet.x ** 2 + toPlanet.y ** 2 + toPlanet.z ** 2);
-        const dir = {
-          x: toPlanet.x / distToPlanet,
-          y: toPlanet.y / distToPlanet,
-          z: toPlanet.z / distToPlanet
-        };
+      const targetVec = new THREE.Vector3(...planetPosition);
 
-        // Stop short distance
-        const stopDist = isSunTarget ? 40 : (activePlanetSize || 1) * 6.0;
+      // Determine source — canvas click is direct, sidebar is two-phase
+      const source = selectionSource || 'canvas';
+      const isPlanetToPlanet = !isFromOverview;
+      const useTwoPhase = source === 'sidebar' && isPlanetToPlanet;
 
-        // ADD ELEVATION: prevent "locked to orbital plane" feel.
-        const elevation = isSunTarget ? 20 : (activePlanetSize || 1) * 3.0;
-
-        endCameraPos = [
-          planetPosition[0] - dir.x * stopDist,
-          planetPosition[1] + elevation,
-          planetPosition[2] - dir.z * stopDist
-        ];
-      }
-
-      // ANIMATE
-      animationRef.current = gsap.to(camera.position, {
-        x: endCameraPos[0],
-        y: endCameraPos[1],
-        z: endCameraPos[2],
-        duration: 2.5,
-        ease: "power2.inOut",
-        onStart: () => {
-          // IMMEDIATE FOCUS LOCK
-          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
-        },
-        onUpdate: () => {
-          // Keep locked on target every frame
-          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
-        },
+      const tl = gsap.timeline({
         onComplete: () => {
-          isAnimatingRef.current = false;
-          prevActivePlanetRef.current = activePlanet;
-          // Ensure final state
-          camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
-
+          isControlling.current = true; // keep controlling after
+          prevPlanetRef.current = activePlanet;
+          prevPositionRef.current = [...planetPosition];
+          // Final precision lock
+          camera.lookAt(targetVec);
           if (onAnimationComplete) onAnimationComplete();
-        }
+        },
       });
 
-      // ---------------------------------------------------------
-      // SCENARIO B: Returning to Overview
-      // ---------------------------------------------------------
-    } else if (!activePlanet) {
-      if (prevActivePlanetRef.current !== null) {
-        isAnimatingRef.current = true;
+      if (useTwoPhase) {
+        // ─── TWO-PHASE CINEMATIC (Sidebar → planet-to-planet) ───
 
-        const targetLookAt = { x: overviewTarget[0], y: overviewTarget[1], z: overviewTarget[2] };
-
-        animationRef.current = gsap.to(camera.position, {
-          x: overviewPosition[0],
-          y: overviewPosition[1],
-          z: overviewPosition[2],
-          duration: 2.0,
-          ease: "power2.inOut",
-          onUpdate: () => {
-            // Look at center
-            camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
-          },
-          onComplete: () => {
-            isAnimatingRef.current = false;
-            prevActivePlanetRef.current = null; // Reset history
-            camera.lookAt(targetLookAt.x, targetLookAt.y, targetLookAt.z);
-
-            if (onAnimationComplete) onAnimationComplete();
-          }
+        // Phase 1: "The Search" — pan lookAt to target, camera stays put
+        tl.to(lookAtTarget.current, {
+          x: targetVec.x,
+          y: targetVec.y,
+          z: targetVec.z,
+          duration: 1.0,
+          ease: 'power2.inOut',
         });
+
+        // Phase 2: "The Approach" — fly to end position, target locked
+        tl.to(camera.position, {
+          x: endPos[0],
+          y: endPos[1],
+          z: endPos[2],
+          duration: 2.0,
+          ease: 'power2.inOut',
+        });
+
+      } else {
+        // ─── SINGLE-PHASE FLUID (Canvas click or from overview) ─────
+
+        // Animate BOTH position and lookAt target simultaneously
+        // so the camera smoothly sweeps to the new planet with zero snap.
+
+        tl.to(camera.position, {
+          x: endPos[0],
+          y: endPos[1],
+          z: endPos[2],
+          duration: 2.5,
+          ease: 'power2.inOut',
+        }, 0); // start at t=0
+
+        tl.to(lookAtTarget.current, {
+          x: targetVec.x,
+          y: targetVec.y,
+          z: targetVec.z,
+          duration: 2.5,
+          ease: 'power2.inOut',
+        }, 0); // start at t=0 — simultaneous
       }
+
+      timelineRef.current = tl;
+
+    // ═══════════════════════════════════════════════════════
+    //  SCENARIO B: Returning to Overview
+    // ═══════════════════════════════════════════════════════
+    } else if (!activePlanet && prevPlanetRef.current !== null) {
+      isControlling.current = true;
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          prevPlanetRef.current = null;
+          prevPositionRef.current = null;
+          camera.lookAt(OVERVIEW_TARGET);
+          if (onAnimationComplete) onAnimationComplete();
+        },
+      });
+
+      // Simultaneously fly up and pan lookAt back to origin
+      tl.to(camera.position, {
+        x: OVERVIEW_POS.x,
+        y: OVERVIEW_POS.y,
+        z: OVERVIEW_POS.z,
+        duration: 2.0,
+        ease: 'power2.inOut',
+      }, 0);
+
+      tl.to(lookAtTarget.current, {
+        x: OVERVIEW_TARGET.x,
+        y: OVERVIEW_TARGET.y,
+        z: OVERVIEW_TARGET.z,
+        duration: 2.0,
+        ease: 'power2.inOut',
+      }, 0);
+
+      timelineRef.current = tl;
     }
 
     return () => {
-      if (animationRef.current) animationRef.current.kill();
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
     };
-  }, [activePlanet, planetPosition, camera, onAnimationComplete, activePlanetSize]);
+  }, [activePlanet, planetPosition, camera, onAnimationComplete, activePlanetSize, selectionSource]);
 
   return null;
 }

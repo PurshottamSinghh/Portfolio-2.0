@@ -24,6 +24,32 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
   const isStructured = Array.isArray(projectData.extendedDetails);
   const isCoreProfile = projectData.category === 'Me';
 
+  /**
+   * Helper to parse text for bullet points or newlines and render as a list if found.
+   */
+  const renderContent = (text, className) => {
+    if (!text) return null;
+
+    if (text.includes('•') || text.includes('\n')) {
+      const items = text
+        .split(/[\n•]/)
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0);
+
+      return (
+        <ul className="details-list">
+          {items.map((item, i) => (
+            <li key={i} className={className}>
+              {item}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return <p className={className}>{text}</p>;
+  };
+
   return (
     <div className={`right-sidebar ${isOpen ? 'right-sidebar--open' : ''}`}>
       {/* Close Button */}
@@ -83,16 +109,14 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
           {isStructured && projectData.extendedDetails.map((section, i) => (
             <div key={i} className="right-sidebar__bio-section">
               <h4 className="right-sidebar__bio-title">{section.title}</h4>
-              <p className="right-sidebar__bio-text">{section.content}</p>
+              {renderContent(section.content, "right-sidebar__bio-text")}
             </div>
           ))}
 
           {/* Plain string extended details (for other entries) */}
-          {!isStructured && projectData.extendedDetails && (
-            <p className="right-sidebar__text right-sidebar__text--extended">
-              {projectData.extendedDetails}
-            </p>
-          )}
+          {!isStructured && projectData.extendedDetails && 
+            renderContent(projectData.extendedDetails, "right-sidebar__text right-sidebar__text--extended")
+          }
         </div>
 
         <div className="right-sidebar__divider"></div>
@@ -109,10 +133,12 @@ function RightDetailSidebar({ isOpen, onClose, projectData }) {
 
         <div className="right-sidebar__divider"></div>
 
-        {/* Collaborators */}
+        {/* Collaborators / Organizations */}
         {projectData.collaborators && projectData.collaborators.length > 0 && (
           <div className="right-sidebar__section">
-            <h3 className="right-sidebar__section-title">Collaborators</h3>
+            <h3 className="right-sidebar__section-title">
+              {projectData.category === 'Experiences' ? 'Organizations/Departments' : 'Collaborators'}
+            </h3>
             <ul className="right-sidebar__collab-list">
               {projectData.collaborators.map((collab, i) => (
                 <li key={i} className="right-sidebar__collab-item">

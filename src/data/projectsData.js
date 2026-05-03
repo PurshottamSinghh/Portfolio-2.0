@@ -236,18 +236,27 @@ const projectsData = [
   {
     id: "jupiter",
     planetName: "Jupiter",
-    projectTitle: "UToledo Athletics Data Analytics",
+    projectTitle: "Data Science Intern",
     description:
-      "Led the migration of the business intelligence infrastructure from Domo to Power BI, developing anomaly detection systems for the athletic department.",
-    techStack: ["Power BI", "Data Science", "Domo"],
+      "Driving strategic decision-making and athletic performance optimization by bridging the gap between raw data and actionable sports analytics.",
+    techStack: ["Python", "Computer Vision", "Power BI", "Machine Learning", "Predictive Modeling", "Statistical Analysis"],
     statusStat: "Internship",
     statusIcon: "◆",
     telemetry: "UToledo Athletics",
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Experiences",
-    extendedDetails: "",
-    collaborators: ["UToledo Athletic Department"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "Collaborating directly with senior Athletics leaders to maximize return on student-athlete investments, optimize resource allocation, and modernize departmental data infrastructure."
+      },
+      {
+        title: "Key Engineering & Analytics Achievements",
+        content: "• Computer Vision Player Tracking: Currently architecting and training a computer vision model designed to track multi-player movement and ball trajectory in basketball footage, extracting advanced spatial performance metrics.\n• Enterprise BI Migration: Spearheaded the departmental infrastructure migration from Domo to Power BI. Proposed the transition to department heads and engineered the new data pipelines to ensure a smooth, zero-downtime transition.\n• Predictive Roster & Revenue Modeling: Preprocessing massive datasets (game stats, consumer ticket sales, player telemetry) to build statistical models that dictate ticket pricing strategies and optimize roster-building and player performance analysis."
+      }
+    ],
+    collaborators: ["UToledo Athletics Department"],
     documentLinks: [],
   },
   {
@@ -255,33 +264,51 @@ const projectsData = [
     planetName: "Makemake",
     projectTitle: "Software Engineer Fellow",
     description:
-      "Software engineering fellowship focused on developing and deploying civic software solutions and public infrastructure tools.",
-    techStack: ["Civic Tech", "Full-Stack", "Agile"],
+      "Core contributor to Batting Cleanup, a live, city-scale smart waste reporting application currently deployed in downtown Toledo.",
+    techStack: ["Hexagonal Architecture", "GIS", "CI/CD", "Agile", "Spatial Data Modeling"],
     statusStat: "Fellowship",
     statusIcon: "◈",
     telemetry: "City of Toledo",
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Experiences",
-    extendedDetails: "",
-    collaborators: ["City of Toledo", "Toledo Codes"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "Engineered robust spatial databases and backend logic to allow citizens to report municipal maintenance issues in real-time via QR codes."
+      },
+      {
+        title: "Key Engineering Achievements",
+        content: "• Spatial Database Architecture: Designed and implemented relational database schemas tailored for GIS services. Profiled and resolved critical bottlenecks, reducing query latency from full-table scans to highly optimized spatial index scans.\n• DevOps & Containerization: Architected reproducible, containerized local development environments to eliminate environment drift. Built automated scripts for database initialization, schema migration, and mock-data hydration.\n• Advanced System Design: Navigated a complex, decoupled monorepo architecture, successfully bridging the data persistence layer with serverless REST APIs.\n• Data Integrity: Engineered backend validation layers to filter real-world data noise, specifically accounting for edge-node hardware inaccuracies like fluctuating GPS signals and spoofing attempts."
+      }
+    ],
+    collaborators: ["Toledo Codes", "City of Toledo"],
     documentLinks: [],
   },
   {
     id: "haumea",
     planetName: "Haumea",
-    projectTitle: "UToledo Sustainability Intern",
+    projectTitle: "Sustainability Intern",
     description:
-      "Collaborated directly with the Director of Sustainability and Energy to analyze environmental metrics and improve campus infrastructure.",
-    techStack: ["Analytics", "Research", "Project Management"],
+      "Managing digital infrastructure and data-driven outreach to engage the UToledo community on campus-wide environmental initiatives.",
+    techStack: ["Web Analytics", "Digital Communication", "Strategic Planning", "Data Tracking"],
     statusStat: "Internship",
     statusIcon: "◇",
     telemetry: "UToledo Campus",
     liveUrl: null,
     sourceUrl: "https://github.com/",
     category: "Experiences",
-    extendedDetails: "",
-    collaborators: ["UToledo Sustainability Office"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "Managing digital infrastructure and data-driven outreach to educate and engage the UToledo community on campus-wide environmental initiatives and green infrastructure."
+      },
+      {
+        title: "Key Responsibilities & Impact",
+        content: "• Digital Infrastructure Maintenance: Managing the Office of Sustainability's primary web platforms, ensuring high availability of resources, event tracking, and program announcements.\n• Data Tracking & Analytics: Utilizing web and social media analytics to track engagement metrics, analyzing the data to optimize digital reach and tailor future sustainability campaigns.\n• Cross-Functional Outreach: Translating complex sustainability goals into accessible digital marketing materials, facilitating student outreach, and working directly with the Director of Sustainability and Energy to hit departmental benchmarks."
+      }
+    ],
+    collaborators: ["UToledo Office of Sustainability"],
     documentLinks: [],
   },
 ];
