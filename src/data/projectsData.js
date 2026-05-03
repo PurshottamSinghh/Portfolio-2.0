@@ -78,19 +78,28 @@ const projectsData = [
     planetName: "Mercury",
     projectTitle: "ParkEZ",
     description:
-      "Led a team of developers to build the architecture and data models for a smart parking solution, securing first place among over 100 participants.",
-    techStack: ["React", "Node.js", "PostgreSQL"],
+      "Built from scratch in just 24 hours for my first-ever hackathon, ParkEZ took 1st Place overall at RocketHacks 2025 against 200+ participants. It is an end-to-end intelligent parking system that leverages Computer Vision and drone-view imagery to provide real-time municipal occupancy tracking.",
+    techStack: ["Python", "PyTorch", "Next.js", "Node.js", "Computer Vision", "Spatial Modeling"],
     statusStat: "1st Place Overall",
     statusIcon: "◆",
     telemetry: "RocketHacks 2025",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh/ParkEZ",
     category: "Projects",
-    extendedDetails: "",
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "Built from scratch in just 24 hours for my first-ever hackathon, ParkEZ took 1st Place overall at RocketHacks 2025 against 200+ participants. It is an end-to-end intelligent parking system that leverages Computer Vision and drone-view imagery to provide real-time municipal occupancy tracking. Recently, I upgraded the core architecture with an advanced ResNet18 model and Polygon Masking to push inference accuracy and environmental versatility even further."
+      },
+      {
+        title: "Key Engineering Achievements",
+        content: "• End-to-End Data Pipeline: Engineered a complete architecture bridging raw aerial imagery to machine learning inference, syncing to a real-time Next.js interactive web dashboard.\n• Spatial Information Systems: Designed complex data models mapping the physical world (Geographic Lat/Lng) to the digital world (Pixel Coordinates), translating raw drone camera data into live map occupancy states.\n• Cross-Environment Integration: Successfully bridged a Python-heavy Machine Learning backend (PyTorch, CUDA) with a Node.js/React frontend, managing state consistency across disparate environments.\n• System Decoupling & Fault Tolerance: Decoupled the GPU-intensive inference engine from the web server using asynchronous state files. This ensures the frontend remains highly responsive and available to users even if the AI inference pipeline pauses or resets."
+      }
+    ],
     collaborators: ["Team of 4 developers"],
     documentLinks: [
-      { label: "Source Code", url: "#" },
-      { label: "Demo Video", url: "#" },
+      { label: "GitHub", url: "https://github.com/PurshottamSinghh/ParkEZ" },
+      { label: "Devpost", url: "https://devpost.com/software/turfwars" },
     ],
   },
   {
@@ -98,18 +107,28 @@ const projectsData = [
     planetName: "Venus",
     projectTitle: "Batting Cleanup",
     description:
-      "City-scale smart waste reporting application engineered to streamline municipal operations and issue tracking.",
-    techStack: ["Deno", "PostgreSQL", "Backend Architecture"],
+      "Batting Cleanup is a live, city-scale smart waste reporting application deployed in downtown Toledo. As a core contributor, I engineered the backend architecture to support real-world scale, transitioning from raw initialization scripts into a modern, type-safe Deno monorepo.",
+    techStack: ["Deno", "PostGIS", "Docker", "Cloudflare Workers", "Drizzle ORM", "Bash", "IaC"],
     statusStat: "In Production",
     statusIcon: "◉",
     telemetry: "City of Toledo",
-    liveUrl: null,
+    liveUrl: "https://battingcleanup.appliedlabs.org/",
     sourceUrl: "https://github.com/",
     category: "Projects",
-    extendedDetails: "",
-    collaborators: ["City of Toledo IT Department"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "Batting Cleanup is a live, city-scale smart waste reporting application deployed in downtown Toledo. It is accessible to the normal public now and if you visit downtown Toledo, you can scan the QR codes to report them instantly. As a core contributor, I engineered the backend architecture to support real-world scale, transitioning from raw initialization scripts into a modern, type-safe Deno monorepo bridging edge-hosted APIs with complex geospatial databases."
+      },
+      {
+        title: "Key Engineering Achievements",
+        content: "• Geospatial Database Architecture: Engineered advanced spatial data models using PostGIS. Benchmarked ST_DWithin geofence queries against 10,000+ localized assets to achieve sub-10ms response times.\n• Infrastructure as Code (IaC) & Automation: Architected reproducible, containerized local environments using Docker Compose and Alpine Linux, eliminating environment drift across a 7-person team. Wrote conditional Bash and SQL scripts to automatically hydrate the testing simulator with 10,000 assets and relational reports.\n• Performance Optimization: Profiled database performance to identify critical indexing bottlenecks, implementing GiST over B-Tree indexes for spatial data to completely eliminate high-latency full-table scans.\n• Modern System Design: Bridged a serverless, edge-hosted REST API (Cloudflare Workers/Hono) with a type-safe ORM (Drizzle). Implemented strict Repository and Service patterns to cleanly isolate business logic from data persistence.\n• Real-World Data Integrity: Designed backend anti-spoofing mechanisms and validation layers utilizing isIndoor flags and location verification logs to handle physical hardware limitations and fluctuating GPS signals."
+      }
+    ],
+    collaborators: ["City of Toledo", "Applied Labs"],
     documentLinks: [
-      { label: "Source Code", url: "#" },
+      { label: "Live Application", url: "https://battingcleanup.appliedlabs.org/" },
+      { label: "News: Toledo Free Press", url: "https://toledofreepress.com/batting-cleanup-aims-to-improve-toledo-maintenance-with-tech/" },
     ],
   },
   {
@@ -264,26 +283,29 @@ const projectsData = [
     planetName: "Makemake",
     projectTitle: "Software Engineer Fellow",
     description:
-      "Core contributor to Batting Cleanup, a live, city-scale smart waste reporting application currently deployed in downtown Toledo.",
-    techStack: ["Hexagonal Architecture", "GIS", "CI/CD", "Agile", "Spatial Data Modeling"],
+      "Collaborated with a team of developers and industry veterans to launch civic software for the City of Toledo, now live in downtown.",
+    techStack: ["Hexagonal Architecture", "SOLID", "Agile", "CI/CD", "Advanced Git"],
     statusStat: "Fellowship",
     statusIcon: "◈",
     telemetry: "City of Toledo",
-    liveUrl: null,
+    liveUrl: "https://battingcleanup.appliedlabs.org/",
     sourceUrl: "https://github.com/",
     category: "Experiences",
     extendedDetails: [
       {
         title: "Overview",
-        content: "Engineered robust spatial databases and backend logic to allow citizens to report municipal maintenance issues in real-time via QR codes."
+        content: "During my fellowship with Toledo Codes, I collaborated with a team of developers and passionate industry veterans to build and successfully launch civic software for the City of Toledo. Our flagship application went live in downtown Toledo just in time for the Mud Hens' Opening Day, allowing citizens to report municipal maintenance issues instantly via physical QR codes. The project is accessible to the normal public now and if you visit downtown Toledo, you can scan the QR codes to report them."
       },
       {
-        title: "Key Engineering Achievements",
-        content: "• Spatial Database Architecture: Designed and implemented relational database schemas tailored for GIS services. Profiled and resolved critical bottlenecks, reducing query latency from full-table scans to highly optimized spatial index scans.\n• DevOps & Containerization: Architected reproducible, containerized local development environments to eliminate environment drift. Built automated scripts for database initialization, schema migration, and mock-data hydration.\n• Advanced System Design: Navigated a complex, decoupled monorepo architecture, successfully bridging the data persistence layer with serverless REST APIs.\n• Data Integrity: Engineered backend validation layers to filter real-world data noise, specifically accounting for edge-node hardware inaccuracies like fluctuating GPS signals and spoofing attempts."
+        title: "Engineering Methodologies & Team Operations",
+        content: "• Architectural Paradigms: Learned and applied advanced system design principles directly from senior engineers with decades of industry experience, specifically focusing on Hexagonal Architecture and SOLID principles for long-term code maintainability.\n• Professional Team Dynamics: Navigated a fast-paced, shared repository environment, successfully managing continuous branch integrations and resolving complex, deep-history merge conflicts.\n• Modern Workflows: Adopted application-first database management and CI/CD workflows, learning the value of strict, type-safe ORM migrations over raw initialization scripts to establish a single source of truth.\n• Designing for the Physical World: Gained deep, practical insight into the evolution of software systems, understanding the crucial 'why' behind decoupling systems and designing code that survives the messy, unpredictable nature of physical urban deployment."
       }
     ],
     collaborators: ["Toledo Codes", "City of Toledo"],
-    documentLinks: [],
+    documentLinks: [
+      { label: "Live Application", url: "https://battingcleanup.appliedlabs.org/" },
+      { label: "News: Toledo Free Press", url: "https://toledofreepress.com/batting-cleanup-aims-to-improve-toledo-maintenance-with-tech/" },
+    ],
   },
   {
     id: "haumea",
