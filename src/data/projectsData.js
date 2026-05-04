@@ -62,7 +62,6 @@ const projectsData = [
           "When I'm not building, you'll find me playing pool, table tennis, or chess. I also enjoy cricket, volleyball, and going trekking and hiking with friends — a reminder that the best algorithms are the ones that get you outside.",
       },
     ],
-    collaborators: ["University of Toledo", "City of Toledo", "Open Source"],
     documentLinks: [
       { label: "Resume", url: "/Purshottam_Singh_Resume.docx" },
       { label: "LinkedIn", url: "https://www.linkedin.com/in/purshottam-singh/" },
@@ -136,19 +135,31 @@ const projectsData = [
     planetName: "Earth",
     projectTitle: "3D Solar System Portfolio",
     description:
-      "Interactive 3D developer portfolio featuring Kepler-based orbital mechanics, GSAP camera animations, and responsive holographic projections.",
-    techStack: ["React Three Fiber", "Three.js", "GSAP"],
-    statusStat: "You Are Here",
+      "A high-fidelity, interactive 3D solar system built with React Three Fiber and GSAP. This project blends orbital mechanics with modern web design to create an immersive, cinematic portfolio experience.",
+    techStack: ["React Three Fiber", "Three.js", "GSAP", "Vector Math"],
+    statusStat: "Active Build",
     statusIcon: "◆",
-    telemetry: "Active Deployment",
-    liveUrl: null,
-    sourceUrl: "https://github.com/",
+    telemetry: "Live Deployment",
+    liveUrl: "https://purshottamsingh.dev",
+    sourceUrl: "https://github.com/PurshottamSinghh/System-2.0",
     category: "Projects",
-    extendedDetails: "",
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "For a long time, I wanted to develop a portfolio that truly represented who I am. My previous site was a generic HTML template—functional, but it lacked soul. I wanted to build something that resonated with my deep passion for astrophysics and my love for complex, interactive systems. This 3D Solar System Portfolio is the result: a fusion of creative coding and celestial mechanics that serves as my digital home."
+      },
+      {
+        title: "Technical Feats & Engineering",
+        content: "• Keplerian Orbital Mechanics: Implemented mathematically accurate (scaled) orbital paths where planets move in real-time, requiring complex frame-by-frame state management in React Three Fiber.\n• Cinematic Camera Engine: Engineered a custom dual-mode camera controller using GSAP timelines. It handles seamless transitions between celestial bodies, synchronizing position and focus (lookAt) to eliminate visual snapping.\n• Liquid Glass UI: Developed a high-refraction glass design system for the sidebars, utilizing backdrop-filters and complex gradients to maintain a premium, refractive aesthetic that reacts to the 3D scene behind it.\n• Responsive Holographic Projection: Designed a projection system that adjusts the scale and orientation of floating project cards based on the camera's perspective and the device's screen size."
+      },
+      {
+        title: "Technologies & Methodologies",
+        content: "• Core Stack: React, Three.js, React Three Fiber (R3F), GSAP (GreenSock Animation Platform), Vanilla CSS.\n• Math & Physics: Trigonometric orbital positioning, Vector mathematics for camera tracking, and eased interpolation for smooth UX.\n• 3D Design Patterns: Mastered Scene Graphs, BufferGeometries, and the lifecycle of 3D objects within a React environment.\n• Performance Optimization: Managed asset loading with React.Suspense and optimized render loops to ensure a smooth 60FPS experience even on mobile devices."
+      }
+    ],
     collaborators: ["Solo Project"],
     documentLinks: [
-      { label: "Source Code", url: "#" },
-      { label: "Live Site", url: "#" },
+      { label: "GitHub Repository", url: "https://github.com/PurshottamSinghh/System-2.0" },
     ],
   },
   {
@@ -156,18 +167,35 @@ const projectsData = [
     planetName: "Mars",
     projectTitle: "Hitch-Hike",
     description:
-      "A real-time ride-matching platform connecting drivers and passengers with intelligent route optimization and live location tracking.",
-    techStack: ["Django", "React", "WebSockets", "PostgreSQL"],
+      "Hitch-Hike is a real-time ride-matching platform featuring a geospatial dispatch pipeline, intelligent Mapbox-powered routing, and a multi-role UX for campus-scale carpooling.",
+    techStack: ["React 19", "Django", "PostGIS", "Mapbox", "TanStack Query", "Docker"],
     statusStat: "Beta Live",
     statusIcon: "◉",
     telemetry: "Campus Network",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh/Hitch-Hike",
     category: "Projects",
-    extendedDetails: "",
-    collaborators: ["University of Toledo"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "Hitch-Hike is a complex geospatial dispatch platform designed to synchronize drivers and riders in near-real-time. Developed as a collaborative team project for EECS 3550 at the University of Toledo, it integrates a multi-subsystem architecture including PostGIS for spatial queries, Mapbox for routing and ETAs, and a gamification layer driven by Django signals."
+      },
+      {
+        title: "Technical Feats & Engineering",
+        content: "• Geospatial Dispatch Pipeline: Engineered a broadcast-and-match system using PostGIS-aware matching and Mapbox Matrix batching to handle localized coordinates with resilient ranking logic.\n• Resilient Map Integration: Implemented Mapbox Directions for ETAs with a robust Haversine fallback system to ensure mission-critical availability even during external API failures.\n• Near-Real-Time UX: Developed a mobile-first SPA utilizing TanStack Query polling for persistent state synchronization across driver and rider roles without the overhead of WebSockets.\n• Gamification & Automated Logic: Leveraged Django pre_save/post_save signals to automatically calculate points, streaks, and CarpoolGroups upon ride completion.\n• Security-Aware Auth: Implemented a dual-auth system spanning JWT-secured REST APIs and Microsoft Azure AD OAuth flows with signed state verification."
+      },
+      {
+        title: "Teamwork & Collaboration",
+        content: "• Professional Collaboration: I rigorously collaborated with my teammate Raj Dangi throughout the entire development lifecycle. We navigated the complexities of balancing work in a high-stakes SWE team, mastering the art of task division and synchronization of modular updates.\n• Engineering Discipline: Established a local dev stack using Docker Compose and PostGIS, ensuring environment parity across the team. Learned the necessity of balancing feature velocity with architectural documentation and regression testing on critical paths."
+      },
+      {
+        title: "Technologies & Methodologies",
+        content: "• Frontend: React 19, Vite 7, TypeScript, TanStack Router (file-based), Tailwind CSS 4, Radix UI, Mapbox GL JS.\n• Backend & Data: Python, Django 4.x, Django REST Framework, PostgreSQL + PostGIS, Docker Compose.\n• Integration: Mapbox Matrix (batching/chunking), Microsoft Azure AD OAuth, JWT Session Management."
+      }
+    ],
+    collaborators: ["Raj Dangi", "University of Toledo"],
     documentLinks: [
-      { label: "Source Code", url: "#" },
+      { label: "GitHub Repository", url: "https://github.com/PurshottamSinghh/Hitch-Hike" },
     ],
   },
   {
@@ -175,38 +203,79 @@ const projectsData = [
     planetName: "Ceres",
     projectTitle: "AI-Provenance",
     description:
-      "Network security project focusing on tracing and verifying AI data pipelines to ensure secure, verifiable machine learning models.",
-    techStack: ["Python", "Security", "Data Pipelines"],
-    statusStat: "Academic Project",
-    statusIcon: "◇",
-    telemetry: "Network Security",
+      "A research-grade 'Sign-then-Embed' provenance pipeline combining public-key cryptography with frequency-domain watermarking to authenticate AI-generated content.",
+    techStack: ["Python", "Cryptography", "Signal Processing", "BCH Codes"],
+    statusStat: "Research System",
+    statusIcon: "◈",
+    telemetry: "AI Watermarking System",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/rajdangi31/AI-Provenance/",
     category: "Projects",
-    extendedDetails: "",
-    collaborators: ["Academic Research Team"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "AI Provenance addresses a defining challenge of the generative AI era: proving an image was created by a specific model and hasn't been tampered with. My teammate Raj Dangi and I set out to build a watermarking algorithm that remains bound to the pixels even after metadata removal. We ended up engineering a hybrid pipeline that combines ECDSA signing with Discrete Wavelet Transform (DWT) signal embedding."
+      },
+      {
+        title: "Technical Architecture",
+        content: "• Cryptographic Layer: Generates a perceptual hash (pHash) fingerprint and signs provenance metadata using ECDSA (NIST P-256). Implements two-tier error correction using BCH (13, t=8) and 8× repetition codes.\n• Signal Embedding Layer: Converts images to YCbCr and applies a 1-level Haar DWT. Selects mid-frequency HL sub-band blocks for bit encoding via 2D Discrete Cosine Transform (DCT) and Quantization Index Modulation (QIM).\n• Verification Engine: Performs majority voting, BCH decoding, and ECDSA signature verification. Produces metrics for SSIM, PSNR, Bit Error Rate (BER), and Normalized Cross-Correlation (NCC)."
+      },
+      {
+        title: "Technical Achievements",
+        content: "• Zero-Knowledge Watermarking: Implemented deterministic, seed-keyed site selection, ensuring that an attacker without the secret seed cannot find or remove the watermark.\n• Adversarial Robustness: Benchmarked against 13 attack conditions including JPEG compression, Gaussian noise, and VAE-surrogate re-encoding (simulating latent-space round trips).\n• Dual Cryptographic Binding: The system binds both metadata and the image fingerprint (pHash) into the signature, preventing 'copy-paste' forgery attacks between different images."
+      },
+      {
+        title: "Teamwork & Collaboration",
+        content: "• Parallel Development: I developed the project alongside Raj Dangi, utilizing an explicit Interface Contract (INTERFACE_CONTRACT.md) to define request/response schemas. This allowed us to work in parallel on the crypto and signal layers without merge conflicts.\n• Rigorous Methodology: We conducted honest empirical evaluations across 500 images, reporting real-world BER values under geometric distortion to establish a transparent baseline for block-based watermarking research."
+      },
+      {
+        title: "Technologies Used",
+        content: "• Core: Python 3.12+, PyWavelets (pywt), OpenCV (cv2).\n• Security: ECDSA P-256 (cryptography lib), bchlib, scikit-image (SSIM).\n• Analysis: MS COCO val2017 dataset, NumPy, Matplotlib, PowerShell automation."
+      }
+    ],
+    collaborators: ["Raj Dangi", "University of Toledo"],
     documentLinks: [
-      { label: "Research Paper", url: "#" },
+      { label: "GitHub Repository", url: "https://github.com/rajdangi31/AI-Provenance/" },
     ],
   },
   {
     id: "saturn",
     planetName: "Saturn",
-    projectTitle: "P.U.L.S.E. Edge IoT",
+    projectTitle: "P.U.L.S.E.",
     description:
-      "Industrial IoT monitoring system detecting machine anomalies from acoustic signals using Python edge inference and a live Firebase telemetry dashboard.",
-    techStack: ["Next.js", "Python Edge", "Firebase"],
-    statusStat: "Hardware + ML",
+      "A predictive maintenance engine using Python edge analytics and a Next.js digital twin to detect industrial machine anomalies via real-time acoustic signal processing.",
+    techStack: ["Next.js", "Python", "Firebase", "Signal Processing", "Framer Motion"],
+    statusStat: "Hackathon Winner",
     statusIcon: "◈",
-    telemetry: "RocketHacks 2026",
+    telemetry: "Edge IoT System",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh/",
     category: "Projects",
-    extendedDetails: "",
-    collaborators: ["Hackathon Team"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "P.U.L.S.E. (Predictive Understanding and Logic Sensing Engine) is an industrial IoT-style predictive maintenance demo. Built in just 24 hours during RocketHacks with my teammate Yashwardhan Ghadge, the system ingests machine audio, performs real-time acoustic analysis at the edge, and synchronizes telemetry to a cloud-based digital twin."
+      },
+      {
+        title: "Technical Architecture",
+        content: "• Edge Pipeline: A Python-based analytics node that processes raw WAV chunks using NumPy and PyAudio. It implements a rolling-window acoustic envelope using a bounded deque to smooth signal peaks over a 9s window.\n• Cloud Integration: Synchronizes real-time machine states (calibrating, healthy, critical, offline) to a Firebase Realtime Database via non-blocking threaded HTTP writes.\n• Digital Twin Frontend: A Next.js 16 / React 19 application featuring a scroll-linked 'filmstrip' animation engine on a HiDPI canvas, mapping scroll progress to pre-rendered machine states using Framer Motion."
+      },
+      {
+        title: "Technical Achievements",
+        content: "• Two-Phase Edge Loop: Implemented an unsupervised calibration phase to learn machine baselines, followed by a monitoring phase that detects anomalies (e.g., vanished impacts or grinding) using dynamic thresholding.\n• Web-Edge Orchestration: Developed a Next.js API route that remotely spawns the Python edge process using child_process.exec, bridging high-level web control with low-level system analytics.\n• HiDPI Canvas Rendering: Engineered a custom scroll-driven video engine that preloads 80 frames and uses requestAnimationFrame for fluid, high-resolution storytelling without the overhead of standard video elements."
+      },
+      {
+        title: "Teamwork & Collaboration",
+        content: "• Rapid Scoping: Collaborated rigorously with Yashwardhan Ghadge to scope, design, and ship an end-to-end vertical slice within the 24-hour hackathon constraint.\n• System Integration: We balanced the workload by splitting the Python/Firebase signal path and the Next.js/Framer motion experience, ensuring a seamless data contract between the edge node and the operator UI."
+      },
+      {
+        title: "What I Learned",
+        content: "• Real-Time Constraints: Mastered chunked audio I/O and latency management at the edge.\n• Process Orchestration: Gained experience in managing system-level processes from a modern web environment.\n• Digital Twin Design: Learned to translate raw sensor telemetry into intuitive, state-driven UI animations that accurately mirror physical hardware conditions."
+      }
+    ],
+    collaborators: ["Yashwardhan Ghadge", "RocketHacks"],
     documentLinks: [
-      { label: "Source Code", url: "#" },
-      { label: "Demo", url: "#" },
+      { label: "GitHub Repository", url: "https://github.com/PurshottamSinghh/P.U.L.S.E." },
     ],
   },
   {
