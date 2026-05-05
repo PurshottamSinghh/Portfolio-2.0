@@ -259,7 +259,6 @@ const projectsData = [
     description:
       "A predictive maintenance engine using Python edge analytics and a Next.js digital twin to detect industrial machine anomalies via real-time acoustic signal processing.",
     techStack: ["Next.js", "Python", "Firebase", "Signal Processing", "Framer Motion"],
-    statusStat: "Hackathon Winner",
     statusIcon: "◈",
     telemetry: "Edge IoT Analytics",
     liveUrl: null,
