@@ -261,7 +261,7 @@ const projectsData = [
     techStack: ["Next.js", "Python", "Firebase", "Signal Processing", "Framer Motion"],
     statusIcon: "◈",
     telemetry: "Edge IoT Analytics",
-    liveUrl: null,
+    liveUrl: "https://acoustic-sensor.vercel.app/",
     sourceUrl: "https://github.com/PurshottamSinghh/P.U.L.S.E.",
     category: "Projects",
     extendedDetails: [
