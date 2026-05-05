@@ -64,7 +64,7 @@ function WelcomeHint() {
           Tap a planet to explore
         </p>
         <span className="welcome-hint__subtext">
-          or use the menu below
+          Explore celestial bodies or use the <strong>guide</strong> in the bottom-right for help.
         </span>
       </div>
     </div>

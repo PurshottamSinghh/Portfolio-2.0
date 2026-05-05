@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -48,6 +48,25 @@ function AsteroidBelt() {
     return temp;
   }, []);
 
+  // Initialize all instance matrices in a single layout effect
+  useLayoutEffect(() => {
+    if (!meshRef.current) return;
+    
+    const tempObject = new THREE.Object3D();
+    for (let i = 0; i < asteroidCount; i++) {
+      const data = asteroids[i];
+      tempObject.position.set(...data.position);
+      tempObject.rotation.set(...data.rotation);
+      tempObject.scale.set(data.scale, data.scale, data.scale);
+      tempObject.updateMatrix();
+      
+      meshRef.current.setMatrixAt(i, tempObject.matrix);
+    }
+    
+    // Notify Three.js that the matrices have been updated
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, [asteroids]);
+
   // Animate: Slowly rotate the entire belt ring
   useFrame(({ clock }) => {
     if (meshRef.current) {
@@ -62,42 +81,8 @@ function AsteroidBelt() {
       <dodecahedronGeometry args={[0.2, 0]} />
       {/* Gray, slightly rough rock material */}
       <meshStandardMaterial color="#888888" roughness={0.8} />
-
-      {/* Helper component to position every single rock */}
-      {asteroids.map((data, i) => (
-        <InstanceHelper
-          key={i}
-          index={i}
-          data={data}
-          parentRef={meshRef}
-        />
-      ))}
     </instancedMesh>
   );
 }
-
-// Helper to set the position of each individual rock in the instance
-const InstanceHelper = ({ index, data, parentRef }) => {
-  // Create a temporary 3D object helper
-  const tempObject = useMemo(() => new THREE.Object3D(), []);
-
-  // Run this logic once to place the rock
-  React.useLayoutEffect(() => {
-    if (parentRef.current) {
-      tempObject.position.set(...data.position);
-      tempObject.rotation.set(...data.rotation);
-      tempObject.scale.set(data.scale, data.scale, data.scale);
-      tempObject.updateMatrix();
-
-      // Update the specific instance at index 'i'
-      parentRef.current.setMatrixAt(index, tempObject.matrix);
-
-      // Start slightly randomized to avoid visual glitches
-      parentRef.current.instanceMatrix.needsUpdate = true;
-    }
-  }, [data, index, parentRef, tempObject]);
-
-  return null;
-};
 
 export default AsteroidBelt;
