@@ -1,0 +1,246 @@
+.guide-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border-radius: 12px;
+  z-index: 2000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 0 0.5px rgba(255, 255, 255, 0.04) inset;
+}
+
+.guide-fab svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+  transition: transform 0.3s ease;
+}
+
+.guide-fab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 6px 28px rgba(0, 0, 0, 0.35),
+    0 0 0 0.5px rgba(255, 255, 255, 0.06) inset;
+  transform: translateY(-2px);
+}
+
+.guide-fab:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* Modal Styles */
+.guide-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.guide-modal {
+  background: linear-gradient(
+    225deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+  position: relative;
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: modalSlideUp 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  color: white;
+}
+
+.guide-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.guide-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.guide-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.guide-header h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+}
+
+.guide-header p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+}
+
+.guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.guide-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.guide-step__icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.guide-step__text h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.guide-step__text p {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.guide-step__text strong {
+  color: white;
+  font-weight: 500;
+}
+
+.guide-cta {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.guide-cta:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .guide-fab {
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .guide-modal {
+    padding: 30px;
+    border-radius: 20px;
+  }
+
+  .guide-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .guide-step {
+    gap: 15px;
+  }
+
+  .guide-step__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  
+  .guide-step__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}

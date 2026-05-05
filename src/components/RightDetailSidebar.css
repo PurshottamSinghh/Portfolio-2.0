@@ -10,10 +10,11 @@
 .right-sidebar {
   position: fixed;
   right: 0;
-  top: 0;
+  top: 90px;
   bottom: 0;
   width: 400px;
   z-index: 1500;
+  border-top-left-radius: 24px;
   background: linear-gradient(
     225deg,
     rgba(255, 255, 255, 0.05) 0%,
@@ -446,6 +447,7 @@
   .right-sidebar {
     width: 100%;
     border-left: none;
+    border-top-right-radius: 24px;
   }
 
   .right-sidebar__content {

@@ -15,6 +15,7 @@ import HolographicCard from './components/HolographicCard';
 import RightDetailSidebar from './components/RightDetailSidebar';
 import WelcomeHint from './components/WelcomeHint';
 import MobileProjectCard from './components/MobileProjectCard';
+import NavigationGuide from './components/NavigationGuide';
 
 // Data
 import projectsData from './data/projectsData';
@@ -243,6 +244,9 @@ function App() {
           onMoreInfo={handleOpenDetail}
         />
       )}
+
+      {/* Navigation Guide — floating help icon */}
+      {!showHologram && !isDetailOpen && <NavigationGuide />}
 
       {/* 3D Canvas */}
       <Canvas

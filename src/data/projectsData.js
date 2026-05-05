@@ -22,8 +22,16 @@ const projectsData = [
     isSun: true,
     projectTitle: "About Me",
     description:
-      "Full-stack developer and computer science student passionate about building immersive web experiences, data-driven solutions, and civic technology.",
-    techStack: ["React", "Python", "Three.js", "PostgreSQL"],
+      "Full-stack engineer and computer science student specialized in high-performance web systems, geospatial architecture, and immersive 3D experiences. I bridge the gap between complex backend logic, like real-time AI and spatial modeling, and premium, fluid user interfaces.",
+    techStack: [
+      "Full-Stack Engineering",
+      "Geospatial Systems",
+      "Generative AI",
+      "3D Graphics",
+      "System Architecture",
+      "Python",
+      "PostgreSQL",
+    ],
     statusStat: "Available",
     statusIcon: "☀",
     telemetry: "Open to Opportunities",
@@ -44,22 +52,22 @@ const projectsData = [
       {
         title: "Technical Journey",
         content:
-          "Driven by curiosity across the full software stack — from studying how LLMs work under the hood, to tracking the rapid evolution of AI technologies, to mastering front-end, back-end, and database systems. This breadth has led to projects spanning full-stack web applications, computer vision models, and interactive 3D experiences like the one you're exploring right now.",
+          "Driven by curiosity across the full software stack: from studying how LLMs work under the hood, to tracking the rapid evolution of AI technologies, to mastering front-end, back-end, and database systems. This breadth has led to projects spanning full-stack web applications, computer vision models, and interactive 3D experiences like the one you're exploring right now.",
       },
       {
         title: "Philosophy",
         content:
-          "A deep appreciation for physics and mathematics drew me to computer science — a field where you can build something extraordinary with nothing more than a laptop and an idea. Like a mathematician, I find satisfaction in solving complex problems using just my mind and the tools at hand.",
+          "A deep appreciation for physics and mathematics drew me to computer science: a field where you can build something extraordinary with nothing more than a laptop and an idea. Like a mathematician, I find satisfaction in solving complex problems using just my mind and the tools at hand.",
       },
       {
         title: "Long-Term Vision",
         content:
-          "My ultimate goal is to create something that meaningfully advances society through technology. I want to leave this world having contributed to humanity's progress toward a better future. On the grandest timescale — perhaps impossible in a single lifetime — I aspire to help advance civilization toward a Type II rating on the Kardashev Scale.",
+          "My ultimate goal is to create something that meaningfully advances society through technology. I want to leave this world having contributed to humanity's progress toward a better future. On the grandest timescale (perhaps impossible in a single lifetime) I aspire to help advance civilization toward a Type II rating on the Kardashev Scale.",
       },
       {
         title: "Beyond the Code",
         content:
-          "When I'm not building, you'll find me playing pool, table tennis, or chess. I also enjoy cricket, volleyball, and going trekking and hiking with friends — a reminder that the best algorithms are the ones that get you outside.",
+          "When I'm not building, you'll find me playing pool, table tennis, or chess. I also enjoy cricket, volleyball, and going trekking and hiking with friends: a reminder that the best algorithms are the ones that get you outside.",
       },
     ],
     documentLinks: [
@@ -146,7 +154,7 @@ const projectsData = [
     extendedDetails: [
       {
         title: "Overview",
-        content: "For a long time, I wanted to develop a portfolio that truly represented who I am. My previous site was a generic HTML template—functional, but it lacked soul. I wanted to build something that resonated with my deep passion for astrophysics and my love for complex, interactive systems. This 3D Solar System Portfolio is the result: a fusion of creative coding and celestial mechanics that serves as my digital home."
+        content: "For a long time, I wanted to develop a portfolio that truly represented who I am. My previous site was a generic HTML template: functional, but it lacked soul. I wanted to build something that resonated with my deep passion for astrophysics and my love for complex, interactive systems. This 3D Solar System Portfolio is the result: a fusion of creative coding and celestial mechanics that serves as my digital home."
       },
       {
         title: "Technical Feats & Engineering",
@@ -247,9 +255,9 @@ const projectsData = [
     techStack: ["Next.js", "Python", "Firebase", "Signal Processing", "Framer Motion"],
     statusStat: "Hackathon Winner",
     statusIcon: "◈",
-    telemetry: "Edge IoT System",
+    telemetry: "Edge IoT Analytics",
     liveUrl: null,
-    sourceUrl: "https://github.com/PurshottamSinghh/",
+    sourceUrl: "https://github.com/PurshottamSinghh/P.U.L.S.E.",
     category: "Projects",
     extendedDetails: [
       {
@@ -321,7 +329,7 @@ const projectsData = [
     statusIcon: "◆",
     telemetry: "High Availability",
     liveUrl: null,
-    sourceUrl: "https://github.com/PurshottamSinghh/",
+    sourceUrl: "https://github.com/PurshottamSinghh",
     category: "Projects",
     extendedDetails: [
       {
@@ -357,7 +365,7 @@ const projectsData = [
     statusIcon: "◆",
     telemetry: "UToledo Athletics",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh",
     category: "Experiences",
     extendedDetails: [
       {
@@ -383,7 +391,7 @@ const projectsData = [
     statusIcon: "◈",
     telemetry: "City of Toledo",
     liveUrl: "https://battingcleanup.appliedlabs.org/",
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh",
     category: "Experiences",
     extendedDetails: [
       {
@@ -412,7 +420,7 @@ const projectsData = [
     statusIcon: "◇",
     telemetry: "UToledo Campus",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh",
     category: "Experiences",
     extendedDetails: [
       {
