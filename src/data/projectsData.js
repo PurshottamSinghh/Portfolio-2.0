@@ -288,6 +288,7 @@ const projectsData = [
     ],
     collaborators: ["Yashwardhan Ghadge", "RocketHacks"],
     documentLinks: [
+      { label: "Live Demo", url: "https://acoustic-sensor.vercel.app/" },
       { label: "GitHub Repository", url: "https://github.com/PurshottamSinghh/P.U.L.S.E." },
     ],
   },
