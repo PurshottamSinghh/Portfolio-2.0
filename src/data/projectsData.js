@@ -22,7 +22,7 @@ const projectsData = [
     isSun: true,
     projectTitle: "About Me",
     description:
-      "Full-stack engineer and computer science student specializing in Machine Learning, high-performance web systems, and geospatial architecture. I bridge the gap between complex Deep Learning models—like real-time computer vision and signal processing—and premium, fluid user interfaces.",
+      "Full-stack engineer and computer science student specializing in Machine Learning, high-performance web systems, and geospatial architecture. I bridge the gap between complex Deep Learning models, like real-time computer vision and signal processing, and premium, fluid user interfaces.",
     techStack: [
       "Machine Learning",
       "Deep Learning",
