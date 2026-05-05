@@ -22,13 +22,14 @@ const projectsData = [
     isSun: true,
     projectTitle: "About Me",
     description:
-      "Full-stack engineer and computer science student specialized in high-performance web systems, geospatial architecture, and immersive 3D experiences. I bridge the gap between complex backend logic, like real-time AI and spatial modeling, and premium, fluid user interfaces.",
+      "Full-stack engineer and computer science student specializing in Machine Learning, high-performance web systems, and geospatial architecture. I bridge the gap between complex Deep Learning models—like real-time computer vision and signal processing—and premium, fluid user interfaces.",
     techStack: [
+      "Machine Learning",
+      "Deep Learning",
       "Full-Stack Engineering",
       "Geospatial Systems",
       "Generative AI",
       "3D Graphics",
-      "System Architecture",
       "Python",
       "PostgreSQL",
     ],
@@ -39,6 +40,11 @@ const projectsData = [
     sourceUrl: "https://github.com/PurshottamSinghh",
     category: "Me",
     extendedDetails: [
+      {
+        title: "Technical Arsenal",
+        content:
+          "• AI & Machine Learning: PyTorch, TensorFlow, Scikit-Learn, Computer Vision (ResNet18, Polygon Masking), Generative AI (Gemini API), Signal Processing (DWT, FFT).\n• Frontend & Graphics: React, Next.js, Three.js, React Three Fiber (R3F), GSAP, Tailwind CSS, TanStack Query.\n• Backend & Systems: Node.js, Deno, FastAPI, Django, PostgreSQL (PostGIS), Firebase, Cloudflare Workers.\n• DevOps & Infrastructure: Docker, HAProxy, CI/CD, Infrastructure as Code (IaC), Bash, Linux (Arch/Ubuntu).\n• Core Architecture: Hexagonal Architecture, SOLID Principles, Agile Methodology, Advanced Git workflows.",
+      },
       {
         title: "Background & Education",
         content:
