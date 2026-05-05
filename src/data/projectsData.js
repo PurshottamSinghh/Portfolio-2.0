@@ -283,18 +283,31 @@ const projectsData = [
     planetName: "Uranus",
     projectTitle: "ChessCoach AI",
     description:
-      "Real-time coaching platform combining deterministic engine analysis (Stockfish) with LLM-generated instruction (Gemini) delivered over WebSockets.",
-    techStack: ["FastAPI", "WebSockets", "Gemini AI"],
+      "A real-time coaching platform that transforms raw Stockfish evaluations into human-centric feedback using Gemini AI. It identifies psychological blunders and provides structured, persona-driven analysis.",
+    techStack: ["FastAPI", "WebSockets", "Stockfish", "Gemini 2.5 Flash", "Python-Chess"],
     statusStat: "Full-Stack Active",
     statusIcon: "◉",
     telemetry: "Stockfish Engine",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh/ChessBOT",
     category: "Projects",
-    extendedDetails: "",
-    collaborators: ["Solo Project"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "ChessCoach AI is a full-stack platform designed to bridge the gap between cold engine scores and actionable instruction. One of my favorite projects, it was born from my personal struggle to break the 1000 ELO barrier on Chess.com. I built this API to act as a 'Harsh but Fair' Grandmaster coach, providing flagship-level analysis for free by leveraging open-source engines and state-of-the-art LLMs. It identifies the systemic mistakes that players (like myself) make repeatedly, helping them break through rating plateaus."
+      },
+      {
+        title: "Technical Feats & Achievements",
+        content: "• Win Probability Drop (WPD) Model: Developed a sigmoid-based mapping system that translates raw Centipawn scores into human-centric win probabilities, allowing the system to distinguish between minor inaccuracies and game-swinging blunders.\n• Macro-Pattern Recognition: Engineered an aggregator service that scans historical games to detect systemic psychological weaknesses such as 'Time Panic', 'Phase Vulnerability' (e.g., bleeding advantage in endgames), and 'Blown Lead' frequency.\n• Real-Time WebSocket Pipeline: Orchestrated a multi-stage pipeline that coordinates Chess.com scraping, Stockfish 16.1 position evaluation, and LLM synthesis to provide live feedback without HTTP timeouts.\n• Contextual LLM Injection: Implemented data compression techniques to feed complex engine evaluations into Gemini as structured JSON prompts, enabling high-fidelity coaching within token limits."
+      },
+      {
+        title: "Technologies & Methodologies",
+        content: "• Backend & Engine: FastAPI (Python), WebSockets, Stockfish 16.1 local binary, python-chess for move validation and PGN parsing.\n• Generative AI: Google Gemini 2.5 Flash using custom System Prompt Design to create a structured feedback persona (Hard Truth → Pattern Breakdown → Actionable Plan).\n• Methodologies: Asynchronous programming (asyncio), Heuristic Game Phase Detection, and Sigmoid-based Win Probability mapping."
+      }
+    ],
+    collaborators: ["Solo Project", "Stockfish Open Source", "Chess.com PubAPI"],
     documentLinks: [
-      { label: "Source Code", url: "#" },
+      { label: "GitHub Repository", url: "https://github.com/PurshottamSinghh/ChessBOT" },
     ],
   },
   {
@@ -302,19 +315,31 @@ const projectsData = [
     planetName: "Neptune",
     projectTitle: "I.R.I.S.",
     description:
-      "Developed a High Availability LAMP stack with automated load balancing and backup functionality, accepted for presentation.",
-    techStack: ["LAMP Stack", "Linux", "Networking"],
-    statusStat: "IEEE Published",
+      "A fault-tolerant, High Availability (HA) web infrastructure built on commodity hardware, featuring automated failover, load balancing, and secure peer-to-peer synchronization.",
+    techStack: ["HAProxy", "Tailscale", "LAMP Stack", "Arch Linux", "Bash"],
+    statusStat: "Research Paper",
     statusIcon: "◆",
-    telemetry: "Research Paper",
+    telemetry: "High Availability",
     liveUrl: null,
-    sourceUrl: "https://github.com/",
+    sourceUrl: "https://github.com/PurshottamSinghh/",
     category: "Projects",
-    extendedDetails: "",
-    collaborators: ["IEEE Conference"],
+    extendedDetails: [
+      {
+        title: "Overview",
+        content: "I.R.I.S. addresses the challenge of providing High Availability (HA) web infrastructure in resource-constrained environments. Built entirely on commodity hardware using open-source tools, the architecture leverages a primary Arch Linux node and a synchronized Ubuntu VM backup. Traffic routing and health monitoring are managed by an HAProxy load balancer. While I served as a contributor and 2nd author, all the primary research and paper work was done by Raj Dangi."
+      },
+      {
+        title: "Technical Feats & Achievements",
+        content: "• Rapid Failover & Recovery: Achieved a failover response time of approximately 3 seconds when the primary node becomes unresponsive, with an autonomous failback recovery time of 5 seconds.\n• Optimized Performance: Maintained a negligible request latency increase of only 0.002 seconds when traffic was dynamically routed to the virtualized backup node.\n• Automated State Replication: Implemented automated synchronization processes using cron and rsync, successfully mirroring static assets every 5 minutes and replicating database state every 10 minutes."
+      },
+      {
+        title: "Technologies & Methodologies",
+        content: "• Infrastructure & Networking: HAProxy for load balancing, Tailscale for creating a secure, encrypted peer-to-peer overlay network (Tailnet).\n• Web Stack: LAMP Stack (Arch Linux/Ubuntu, Apache, MariaDB, PHP).\n• System Design Concepts: High Availability, Fault Tolerance, Health Polling, and Eventual Consistency patterns."
+      }
+    ],
+    collaborators: ["Raj Dangi (1st Author)", "Purushottam Singh Thakur"],
     documentLinks: [
-      { label: "IEEE Paper", url: "#" },
-      { label: "Source Code", url: "#" },
+      { label: "Published Research Paper", url: "/Paper-IRIS.pdf" },
     ],
   },
 
