@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
+import SaturnRings from './SaturnRings';
 
 function Planet({
   distance = 10,
@@ -12,6 +13,7 @@ function Planet({
   isActive,
   onSelect,
   onPositionUpdate,
+  hasRings = false,
 }) {
   const meshRef = useRef();
   const planetMeshRef = useRef();
@@ -151,6 +153,9 @@ function Planet({
           side={THREE.DoubleSide}
         />
       </mesh>
+
+      {/* Saturn's Rings (only if hasRings is true) */}
+      {hasRings && <SaturnRings planetSize={size} />}
     </group>
   );
 }

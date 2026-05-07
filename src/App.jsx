@@ -313,6 +313,7 @@ function App() {
               isActive={activePlanet === planet.name}
               onSelect={handleSelectFromCanvas}
               onPositionUpdate={handlePositionUpdate}
+              hasRings={planet.name === "Saturn"}
             />
 
             {/* Holographic Card — desktop only, rendered in 3D space near frozen planet */}
